@@ -1,0 +1,117 @@
+CONTEXTO COMPLETO PROYECTO TFM-CIBER-CEU-JOSE-TORRE
+==================================================
+Fecha: 15 Abril 2026
+Autor: Jose Tomas Torre (Master Cybersecurity CEU)
+Estado: Fase 1 implementada y funcional
+
+OBJETIVO PRINCIPAL
+------------------
+Laboratorio vulnerable VMware simulando PYME/Startup web
+Implementar OWASP Top 10 2025 de forma progresiva
+Documentación completa para TFM Master Ciberseguridad
+
+ESTADO ACTUAL DEL PROYECTO
+--------------------------
+✅ Estructura repo completa con .gitkeep
+✅ Fase 1 scripts funcionales (deploy + reset)
+✅ Documentación inicial docs/vulns-*.md
+✅ Topología: 3 VMs (Víctima Ubuntu + Kali + Infra Windows)
+
+LABORATORIO IMPLEMENTADO (FASE 1)
+---------------------------------
+VM Víctima: Ubuntu 22.04 Server (192.168.56.10)
+- Apache 2.4.52 + PHP 8.1 + MySQL 8.0
+- OWASP A01: Broken Access Control (DVWA low + app PYME)
+- OWASP A02: Security Misconfig (display_errors=On, server-status, .git expuesto)
+- OWASP A05: Injection (SQLi directo en app PYME)
+
+VM Atacante: Kali Linux 2026 (192.168.56.100)
+Red: VMware Host-Only VMnet10 aislada
+
+URLS VULNERABLES FASE 1:
+http://192.168.56.10/pyme/?client_id=1           # PYME app
+http://192.168.56.10/pyme/?client_id=1 OR 1=1    # SQLi A05
+http://192.168.56.10/dvwa/                       # DVWA low A01
+http://192.168.56.10/server-status               # Misconfig A02
+
+SCRIPTS IMPLEMENTADOS
+---------------------
+scripts/deploy-fase1.sh  # Despliegue completo Fase 1
+scripts/reset.sh         # Reset DB + archivos + servicios
+
+WORKFLOW USO:
+1. VM Ubuntu limpia → sudo ./scripts/deploy-fase1.sh
+2. Snapshot "fase1-listo" en VMware
+3. Entre pruebas: sudo ./scripts/reset.sh
+4. O revert snapshot si algo se rompe
+
+ROADMAP PENDIENTE (Próximas fases)
+----------------------------------
+FASE 2: A04 Cryptographic + A07 Authentication
+- Contraseñas MD5, sesiones sin secure flag
+- Login débil, password reuse
+
+FASE 3: A03 Supply Chain + A08 Integrity + A09 Logging
+- Dependencias npm/pip vulnerables
+- Deserialization PHP, sin logs seguridad
+
+FASE 4: A06 Design + A10 Exceptions
+- Flujos auth bypass, stack traces completos
+
+DOCUMENTACIÓN PENDIENTE
+-----------------------
+docs/vulns-*.md → Completar writeups con:
+- Descripción técnica
+- Exploit paso a paso
+- Evidencia screenshots
+- Mitigación propuesta
+
+README.md → Estructura completa TFM
+- Arquitectura diagrama
+- Instrucciones detalladas
+- OWASP Top 10 progreso
+
+ESCRITURA TFM
+-------------
+- Introducción: Justificación PYME vulnerable lab
+- Metodología: OWASP Top 10 2025 implementación
+- Resultados: Explotaciones + evidencias
+- Conclusiones: Lecciones aprendidas
+
+PRÓXIMOS PASOS INMEDIATOS
+-------------------------
+1. Completar docs/vulns-a01.md, a02.md, a05.md con screenshots
+2. Script deploy-fase2.sh (A04+A07)
+3. README.md plantilla completa
+4. Diagrama topología (mermaid/drawio)
+
+COMANDOS ÚTILES VMWARE
+----------------------
+# Red Host-Only VMnet10
+VMware → Edit → Virtual Network Editor → Add Network → Host-only
+IP range: 192.168.56.0/24
+
+# Snapshot naming
+fase1-listo
+fase2-crypto-auth
+fase3-supplychain
+
+NOTAS TÉCNICAS
+--------------
+- Usar siempre sudo para scripts
+- IP fija en /etc/netplan/ para estabilidad
+- Firewall ufw: allow from 192.168.56.100 (Kali)
+- Backup snapshots fuera del repo (.gitignore *.vmdk)
+
+ESTADO GIT REPO (15/04/2026)
+----------------------------
+✅ Estructura completa
+✅ Scripts fase1 funcionales
+✅ Docs iniciales
+⏳ README pendiente
+⏳ Fases 2-4 pendientes
+
+CONTACTO IA (Perplexity)
+------------------------
+Este archivo generado por IA para continuidad.
+En caso de pérdida chat: "continúa TFM-Ciber-CEU-Jose-Torre desde context-ia.txt"
