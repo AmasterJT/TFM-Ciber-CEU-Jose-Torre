@@ -102,6 +102,20 @@ network:
 sudo netplan apply
 ```
 
+NOTA: si queremos tener ionternet en la maquina victima podemos agregar otro adaptador de red:
+``` 
+network:
+  version: 2
+  ethernets:
+    ens33:
+      dhcp4: no
+      addresses:
+        - 192.168.56.10/24
+    ens37:
+      dhcp4: true
+      optional: true
+``` 
+
 3. VM Atacante (Kali Linux)
 
 >- Nombre: kali-atacante
