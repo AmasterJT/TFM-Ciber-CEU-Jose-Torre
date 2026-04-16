@@ -1,0 +1,93 @@
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.code-workspace
+
+# VMs and Infrastructure
+vms/**/*.vmdk
+vms/**/*.log
+vms/**/*.ini
+vms/**/snapshots/
+vms/**/.vagrant
+vms/**/Vagrantfile.lock.json
+
+# Build artifacts
+build/
+dist/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.dll
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.Python
+env/
+venv/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Credentials and Secrets
+.env
+.env.local
+.env.*.local
+secrets/
+credentials/
+*.pem
+*.key
+*.keystore
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Test and Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+*.lcov
+test-results/
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+.tmp/
+
+# OS-specific
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Project-specific
+notes/private/
+.local/
+cache/
+temp/
