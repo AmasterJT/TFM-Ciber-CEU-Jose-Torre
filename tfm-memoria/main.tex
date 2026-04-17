@@ -1,6 +1,8 @@
 \documentclass[12pt]{article}
 %\documentclass[11pt, twoside]{article}
 
+\usepackage{lipsum}
+
 % --- Codificación y fuentes ---
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
@@ -15,6 +17,7 @@
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usepackage{array}
+\setlength{\arrayrulewidth}{0.1pt}
 \usepackage{enumitem}
 \usepackage{ragged2e}
 \usepackage{amsmath}
@@ -59,7 +62,6 @@
 
 % --- Estilo secciones ---
 \definecolor{AzulTFG}{RGB}{0, 148, 224}
-\definecolor{AzulTFG}{RGB}{0, 148, 224}
 \usepackage{titlesec}
 
 % --- Interlineado entre párrafos y sangría ---
@@ -69,10 +71,24 @@
 % --- Captions sin negrita ---
 \usepackage{caption}
 \usepackage{subcaption}
-\captionsetup{labelfont=normalfont}
+\captionsetup{
+  labelfont={color=blue},
+  textfont=normalfont,
+  labelsep=space
+}
 
 % --- Hipervínculos ---
-\usepackage[hidelinks]{hyperref}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\hypersetup{
+  unicode=true,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=blue,
+  filecolor=blue,
+  urlcolor=blue,
+}
+\renewcommand{\UrlFont}{\color{blue}\uline}
 
 % --- Formato índice ---
 \usepackage[nottoc, notlot, notlof]{tocbibind}% (Esta línea en tu fichero original parece pensada para gallego,
@@ -251,11 +267,11 @@
 % 1 Introducción
 \include{Cuerpo/01_Introduccion}
 
-% 2 Estado del arte
-\include{Cuerpo/02_Estado_del_arte}
+% 2 Gestión del proyecto
+\include{Cuerpo/02_Gestion_del_proyecto}
 
 % 3 Marco teórico y tecnológico
-\include{Cuerpo/03_Marco_teorico_y_tecnologico}
+\include{Cuerpo/03_Análisis}
 
 % 4 Análisis del sistema
 \include{Cuerpo/04_Analisis_del_sistema}
