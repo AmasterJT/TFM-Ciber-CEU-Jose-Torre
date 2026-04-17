@@ -29,7 +29,8 @@
 *.run.xml
 
 # Generated PDF and preview files
-*.pdf
+# NOTE: keep PDF output in repo
+!*.pdf
 *.ps
 *.dvi
 *.xdv
