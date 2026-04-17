@@ -1,0 +1,46 @@
+\restoregeometry
+\setlength{\headsep}{4pt}
+%Cabecera y pie de página
+\pagestyle{fancy}
+\fancyhf{}
+
+\definecolor{Negro}{RGB}{0, 0, 0}
+
+
+\fancyhfoffset[L]{0pt} % sin desplazamiento a la izquierda
+\fancyhfoffset[R]{0pt} % sin desplazamiento a la derecha
+\setlength{\headwidth}{\textwidth} % que la cabecera use el ancho del texto
+
+
+\cfoot{\thepage}
+
+% Estilo sección tipo "Display" (Salto de línea)
+\titleformat{\section}[display]
+  {\selectfont\bfseries\color{Negro}} % Estilo común (Arial, Negrita, Versalitas)
+  {\fontsize{20pt}{20pt}\selectfont Capítulo \thesection}    % <--- TAMAÑO 20pt para la etiqueta
+  {0pt}                                                      % Espacio entre líneas
+  {\fontsize{24pt}{24pt}\selectfont}                         % <--- TAMAÑO 24pt para el texto del título
+
+\titlespacing{\section}
+  {0pt}                  % Margen izquierdo
+  {18pt}                 % Espacio superior
+  {10pt}                 % Espacio inferior (ajustado para que no pegue al párrafo)
+
+%Estilo subsección
+\titleformat{\subsection}{\normalfont\fontsize{15.5pt}{20}\bfseries}{\thesubsection}{0.3em}{}
+\titlespacing\subsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+%Estilo subsubsección
+\titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+\titleformat{\subsubsection}{\normalfont\fontsize{15.5pt}{20}\itshape}{\thesubsubsection}{0.3em}{}
+
+%Espacio debaijo de captions
+\setlength{\belowcaptionskip}{0pt}
+%Espacio arriba de captions
+\setlength{\abovecaptionskip}{2pt}
+
+
+%interlineado entre parágrafo y sangrado
+%\setlength{\parskip}{4pt} %interlineado
+%\setlength{\parindent}{20pt} %sangrado
+

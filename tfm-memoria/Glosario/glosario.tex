@@ -1,0 +1,80 @@
+% =========================
+% Glosario de términos
+% =========================
+
+\newglossaryentry{backend}{
+    name=Backend,
+    description={Conjunto de servidores y componentes software encargados de proporcionar servicios, gestionar la lógica de negocio y permitir el acceso a recursos y datos desde aplicaciones cliente}
+}
+
+\newglossaryentry{framework}{
+    name=Framework,
+    description={Estructura de desarrollo compuesta por componentes de software reutilizables, librerías y convenciones que facilitan la creación de aplicaciones de forma estandarizada y eficiente}
+}
+
+\newglossaryentry{resultset}{
+    name=ResultSet,
+    description={Estructura de datos utilizada en JDBC para representar el conjunto de resultados devuelto por una consulta a una base de datos, permitiendo recorrer fila a fila los registros obtenidos y acceder a los valores de cada columna}
+}
+
+\newglossaryentry{jdbc}{
+    name=JDBC,
+    description={Java Database Connectivity, API estándar de Java que permite a las aplicaciones acceder y gestionar bases de datos relacionales mediante la ejecución de consultas SQL y la manipulación de los resultados obtenidos}
+}
+
+\newglossaryentry{sku}{
+    name=SKU,
+    description={Stock Keeping Unit, identificador único de un producto en el inventario}
+}
+
+
+\newglossaryentry{dao}{
+    name=DAO,
+    description={Data Access Object, patrón de diseño que encapsula el acceso a la base de datos, separar el acceso a la base de datos de la lógica de negocio y proporciona una interfaz para realizar operaciones CRUD sobre una base de datos}
+}
+
+\newglossaryentry{fxml}{
+    name=FXML,
+    description={Es un archivo XML que permite describir el diseño y la estructura visual de una aplicación JavaFX}
+}
+
+\newglossaryentry{base de datos relacional}{
+    name=Base de datos relacional,
+    description={Una base de datos relacional es un conjunto de una o más tablas estructuradas en registros (líneas) y campos (columnas), que se vinculan entre sí por campos en común que poseen las mismas características en ambas tablas, como por ejemplo el nombre de campo, tipo y longitud. A estos campos generalmente se les denomina campos identificadores (ID) o campos clave. A esta forma de construir bases de datos se le denomina modelo relacional.}
+}
+
+
+% =========================
+% Glosario de siglas
+% =========================
+
+\newacronym
+  [plural=WMS,
+   longplural={Sistemas de Gestión de Almacenes}]
+  {wms}{WMS}{Sistema de Gestión de Almacenes}
+
+\newacronym{api}{API}{Interfaz de Programación de Aplicaciones}
+\newacronym{rest}{REST}{Transferencia de Estado Representacional}
+\newacronym{erp}{ERP}{Planificación de Recursos Empresariales}
+\newacronym{gui}{GUI}{Interfaz Gráfica de Usuario}
+\newacronym{sql}{SQL}{Lenguaje de Consulta Estructurado}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{https}{HTTPS}{Hypertext Transfer Protocol Secure}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{xml}{XML}{Extensible Markup Language}
+
+% =========================
+% Impresión del glosario
+% =========================
+
+\section*{Glosario de siglas}
+\label{sec:glosario-siglas}
+\vspace{-1.3cm}
+
+\printglossary[type=\acronymtype, title={}, toctitle={}]
+
+\section*{Definiciones}
+\label{sec:glosario-terminos}
+\vspace{-1.3cm}
+
+\printglossary[title={}, toctitle={}]

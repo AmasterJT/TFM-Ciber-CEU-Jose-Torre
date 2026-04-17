@@ -181,7 +181,7 @@ network:
 > 💾 Disco: 60GB thin  
 > 🌐 Red: VMnet10 (192.168.66.100)  
 
-## 🔢 Orden de creación
+## 🔢 Despliegue del laboratorio
 
 1. 🧱 Configuración de VMnet10 (*Host-only*) 
 2. 🖥️ Creación de la máquina `maquina-victima-ubuntu-server-TFM` → Instalación de Ubuntu Server → Configuración de IP fija  
