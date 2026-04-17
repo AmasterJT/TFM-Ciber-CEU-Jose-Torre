@@ -8,6 +8,7 @@
 \usepackage{kpfonts}
 
 % --- Paquetes generales ---
+\usepackage{titletoc}
 \usepackage{graphicx}
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{xcolor}
@@ -35,6 +36,8 @@
 % ]{FiraCode}
 \setmonofont{Arial}
 \setmainfont{Times New Roman}
+
+\newfontfamily\calibribody{Calibri}
 
 
 % --- Márgenes y geometría ---
@@ -72,8 +75,7 @@
 \usepackage[hidelinks]{hyperref}
 
 % --- Formato índice ---
-\usepackage[nottoc]{tocbibind}
-% (Esta línea en tu fichero original parece pensada para gallego,
+\usepackage[nottoc, notlot, notlof]{tocbibind}% (Esta línea en tu fichero original parece pensada para gallego,
 %  pero la mantengo por compatibilidad. En español no hace efecto.)
 \addto\captionsgalician{\renewcommand{\contentsname}{Contenido}}
 \usepackage{tocloft}

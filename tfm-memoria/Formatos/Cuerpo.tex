@@ -44,3 +44,18 @@
 %\setlength{\parskip}{4pt} %interlineado
 %\setlength{\parindent}{20pt} %sangrado
 
+% Configuración para el índice (Secciones)
+\titlecontents{section}
+  [0pt]                                   % Sangría izquierda
+  {\fontspec{Calibri}\addvspace{10pt}\fontsize{11pt}{14pt}}             % Espacio arriba y negrita
+  {Capítulo \thecontentslabel\;}       % Formato: Capítulo X + espacio
+  {}                                      % Formato si no tiene número
+  {\titlerule*[0.7pc]{.}\contentspage}    % Puntos y número de página
+
+% Configuración para Subsecciones (opcional, para mantener coherencia)
+\titlecontents{subsection}
+  [2em]                                   % Sangría para subsecciones
+  {\addvspace{2pt}\normalfont}
+  {\thecontentslabel\quad}
+  {}
+  {\titlerule*[0.7pc]{.}\contentspage}
