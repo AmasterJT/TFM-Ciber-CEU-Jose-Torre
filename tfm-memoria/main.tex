@@ -77,24 +77,18 @@
   labelsep=space
 }
 
+
 % --- Hipervínculos ---
 \usepackage[normalem]{ulem}
 \usepackage{hyperref}
-\hypersetup{
-  unicode=true,
-  colorlinks=true,
-  linkcolor=black,
-  citecolor=blue,
-  filecolor=blue,
-  urlcolor=blue,
-}
-\renewcommand{\UrlFont}{\color{blue}\uline}
+
+\renewcommand{\UrlFont}{\color{black}\uline}
 
 % --- Formato índice ---
 \usepackage[nottoc, notlot, notlof]{tocbibind}% (Esta línea en tu fichero original parece pensada para gallego,
 %  pero la mantengo por compatibilidad. En español no hace efecto.)
 \addto\captionsgalician{\renewcommand{\contentsname}{Contenido}}
-\usepackage{tocloft}
+%\usepackage{tocloft}
 
 % --- Bibliografía ---
 \addto\captionsspanish{%
@@ -136,7 +130,7 @@
   framexleftmargin=1.8em,
   breaklines=true,
   frame=single,
-  keywordstyle=\color{blue}\bfseries,
+  keywordstyle=\color{red}\bfseries,
   commentstyle=\color{gray},
   stringstyle=\color{green!40!black},
   columns=fullflexible,
@@ -227,6 +221,16 @@
 \newcommand{\permits}{\textcolor{green!60!black}{Sí}}
 \newcommand{\denies}{\textcolor{red!70!black}{No}}
 
+
+\hypersetup{
+  unicode=true,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=black,
+  urlcolor=black,
+}
+
 \begin{document}
 
 % --- Portada ---
@@ -245,18 +249,26 @@
 
 % --- Índices ---
 \input{Formatos/Contenido_roman}
+\vspace*{-4cm}
 \tableofcontents
 \clearpage
 
 \clearpage
+\vspace*{-4cm}
 \listoffigures
+
 \clearpage
+\vspace*{-4cm}
 \listoftables
 
 \clearpage
-\pagestyle{fancy}
-\input{Formatos/Contenido}
 \pagenumbering{arabic}
+\setcounter{page}{1} % Forzado de seguridad
+
+\input{Formatos/Contenido}
+\pagestyle{fancy}
+
+
 
 % =========================================================
 % CUERPO DEL TRABAJO (estructura solicitada)

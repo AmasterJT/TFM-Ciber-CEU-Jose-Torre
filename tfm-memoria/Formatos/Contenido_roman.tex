@@ -1,31 +1,37 @@
 
 \newgeometry{
- left=30mm,
- right=30mm,
- top=35mm,
- bottom=30mm,
- headheight=31.1pt
+left=30mm,
+right=30mm,
+top=35mm,
+bottom=30mm,
+headheight=31.1pt
  }
- \setlength{\headsep}{35pt}
+
+\hypersetup{
+  unicode=true,
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=black,
+  urlcolor=black,
+}
+
+\setlength{\headsep}{35pt}
  %Cabecera y pie de página
-\tocloftpagestyle{fancy}
+%\tocloftpagestyle{fancy}
 \cfoot{\thepage}
 
 %formato contido
-\renewcommand{\cftsecfont}{\normalfont}
-\renewcommand{\cftsecdotsep}{1}
-\renewcommand{\cftdotsep}{1}
-\renewcommand{\cftsecpagefont}{\normalfont}
-\renewcommand{\cfttoctitlefont}{\fontsize{17.5pt}{0}\scshape\bfseries\color{black}}
-\renewcommand{\cftdot}{\normalfont.}
-\setlength{\cftsecindent}{0em}
-\setlength{\cftsubsecindent}{1.5em}
-\setlength{\cftsubsubsecindent}{3em}
 \renewcommand{\numberline}[1]{#1 \hspace{1pt}}
 
-%formato lista figuras
-\renewcommand{\cftloftitlefont}{\fontsize{17.5pt}{0}\scshape\bfseries\color{black}}
 
-%formato lista de tablas
-\renewcommand{\cftlottitlefont}{\fontsize{17.5pt}{0}\scshape\bfseries\color{black}}
+% Forzar que los números de página en los índices sean siempre negros
+
+
+
+% --- Formato lista de figuras (FORZADO TOTAL) ---
+
+% Redefinimos cómo se imprime cada línea para forzar el color negro
+
+% --- Formato lista de tablas (FORZADO TOTAL) ---
 

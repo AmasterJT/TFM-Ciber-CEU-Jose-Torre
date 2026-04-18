@@ -69,3 +69,26 @@
   {\thecontentslabel\quad}                % Formato del número (ej. 1.1)
   {}                                      % Formato si no tiene número
   {\titlerule*[0.8pc]{.}\contentspage}    % Puntos guía y número de página
+
+  % ---------------------------
+
+
+
+
+  % --- CONFIGURACIÓN PARA EL ÍNDICE DE FIGURAS ---
+\titlecontents{figure}
+  [0pt]                                     % Sangría izquierda
+  {\fontspec{Calibri}\addvspace{5pt}\fontsize{11pt}{14pt}\color{black}} % Fuente, espacio y NEGRO
+  {Figura \thecontentslabel\quad}           % Formato: Figura X
+  {}                                        
+  {\titlerule*[0.7pc]{.}\contentspage}      % Puntos y número
+  [\hypersetup{linkcolor=black}]            % Forzado de color negro para el número/enlace
+
+% --- CONFIGURACIÓN PARA EL ÍNDICE DE TABLAS ---
+\titlecontents{table}
+  [0pt]                                     % Sangría izquierda
+  {\fontspec{Calibri}\addvspace{5pt}\fontsize{11pt}{14pt}\color{black}} % Fuente, espacio y NEGRO
+  {Tabla \thecontentslabel\quad}            % Formato: Tabla X
+  {}                                        
+  {\titlerule*[0.7pc]{.}\contentspage}      % Puntos y número
+  [\hypersetup{linkcolor=black}]            % Forzado de color negro para el número/enlace

@@ -1,29 +1,28 @@
 
 \newgeometry{
- left=30mm,
- right=30mm,
- top=35mm,
- bottom=30mm,
- headheight=31.1pt
+    left=30mm,
+    right=30mm,
+    top=35mm,
+    bottom=30mm,
+    headheight=31.1pt
  }
- \setlength{\headsep}{35pt}
+
+\setlength{\headsep}{35pt}
  %Cabecera y pie de página
-\tocloftpagestyle{fancy}
+%\tocloftpagestyle{fancy}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyhead[LH]{\includegraphics[height=1cm]{FotosPlantilla/CEU-Logo2.png}}
 \fancyhead[RH]{Introducción}
-%\cfoot{\thepage}
+\cfoot{\thepage}
 
 
-\setlength{\cftsecindent}{0em}
-\setlength{\cftsecnumwidth}{5cm}
-\setlength{\cftsubsecindent}{1.5em}
-\setlength{\cftsubsubsecindent}{3em}
+% Forzar que los números de página en los índices sean siempre negros
+
+% --- Formato lista de figuras (FORZADO TOTAL) ---
+% Redefinimos cómo se imprime cada línea para forzar el color negro
+% --- Formato lista de tablas (FORZADO TOTAL) ---
 
 
-%formato lista figuras
-\renewcommand{\cftloftitlefont}{\fontsize{17.5pt}{0}\scshape\bfseries\color{black}}
 
-%formato lista de tablas
-\renewcommand{\cftlottitlefont}{\fontsize{17.5pt}{0}\scshape\bfseries\color{black}}
+
