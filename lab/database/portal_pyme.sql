@@ -123,7 +123,7 @@ CREATE TABLE `perfil_fotos` (
 
 LOCK TABLES `perfil_fotos` WRITE;
 /*!40000 ALTER TABLE `perfil_fotos` DISABLE KEYS */;
-INSERT INTO `perfil_fotos` VALUES (1,2,'conejo_hacker.jpg','conejo_hacker.jpg','/portal_pyme/uploads/conejo_hacker.jpg','2026-04-21 23:55:19',0),(2,2,'conejo_hacker.jpg','conejo_hacker.jpg','/portal_pyme/uploads/conejo_hacker.jpg','2026-04-22 00:35:17',1);
+INSERT INTO `perfil_fotos` VALUES (2,2,'conejo_hacker.jpg','conejo_hacker.jpg','/portal_pyme/uploads/conejo_hacker.jpg','2026-04-22 00:35:17',1);
 /*!40000 ALTER TABLE `perfil_fotos` ENABLE KEYS */;
 UNLOCK TABLES;
 
