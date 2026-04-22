@@ -8,9 +8,9 @@ include 'config/db.php';
 include 'includes/header.php';
 ?>
 
-<main class="content" style="max-width: 400px; margin: 40px auto;">
+<main class="content login-content">
     <div class="login-page">
-        <div class="card" >
+        <div class="login-card" >
             <h3>Inicio de sesión</h3>
 
             <?php
