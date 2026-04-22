@@ -531,9 +531,23 @@ table td {
     }
 }
 
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.login-content {
+    display: block;
+    width: 100%;
+    padding: 0;
+}
+
 .login-page {
-    width: 50%;
-    min-height: calc(100vh - 140px);
+    width: 100%;
+    min-height: calc(100vh - 72px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -541,9 +555,8 @@ table td {
 }
 
 .login-card {
-    width: 50%;
+    width: 100%;
     max-width: 420px;
-    min-width: 320px;
     background: white;
     border-radius: 12px;
     padding: 28px;
@@ -553,13 +566,4 @@ table td {
 .login-card h3 {
     margin-bottom: 20px;
     font-size: 1.35rem;
-    min-width: 0;
-    padding: 20px 16px;
-}
-
-
-.disabled-link {
-    pointer-events: none;
-    opacity: 0.5;
-    cursor: not-allowed;
 }
