@@ -212,35 +212,12 @@ iface eth1 inet static
 
 ## Despliegue e instalación del laboratorio
 
-
-### Modos de despliegue
-
-El laboratorio puede desplegarse en dos modos distintos, según el objetivo de uso:
-
-#### 1. Modo laboratorio local
-Este modo está pensado para pruebas individuales en una única máquina anfitriona. La red se configura como **Host-only**, de forma que la víctima y la máquina atacante quedan aisladas de la red física y solo pueden comunicarse dentro del entorno virtual. Esta opción es la más sencilla de reproducir y la más adecuada para desarrollo, validación inicial y documentación del laboratorio.
-
----desplegable de como instalarlo---
-
-#### 2. Modo Red Team distribuido
-Este modo está pensado para ejercicios colaborativos o entornos más realistas. En lugar de depender de Host-only en un único PC, los participantes se conectan a una **VPN privada** o a una red interna compartida. De esta forma, cada miembro del equipo puede usar su propia máquina atacante y seguir accediendo a la víctima mediante su IP fija, siempre que esté dentro del mismo segmento de red o tenga acceso enrutado a esa subred.
-
----desplegable de como instalarlo---
-
-#### Ventajas de este enfoque
-- Permite reutilizar la misma arquitectura tanto en pruebas locales como en ejercicios de equipo.
-- Facilita la escalabilidad del laboratorio.
-- Mejora la reproducibilidad del entorno.
-- Se acerca más a un escenario real de Red Team, donde los atacantes acceden a un entorno interno autorizado.
-
-
-
 El laboratorio puede ponerse en marcha de dos formas:
 
 - Importando las máquinas virtuales preconfiguradas.
 - Realizando una instalación manual desde cero.
 
-### Configuración de red
+### 🌍 Configuración de red
 
 Tanto si descargamos las máquinas virtuales como si las configuramos manualmente, primero debemos configurar la red Host-only.
 
@@ -248,6 +225,9 @@ Tanto si descargamos las máquinas virtuales como si las configuramos manualment
 2. Crear o seleccionar una red **Host-only**: `VMnet10`.
 3. Configurar la subred: `192.168.66.0/24`.
 4. Desactivar DHCP para usar IPs fijas.
+
+
+
 
 ### Opción 1. Importación de máquinas virtuales
 
@@ -257,6 +237,10 @@ Tanto si descargamos las máquinas virtuales como si las configuramos manualment
 
 - [MEGA](https://mega.nz/folder/uuoWnTCa#gCMeFu6JBzY6sQEWtxb_SQ)
 - [OneDrive](https://outlook.cloud.microsoft/host/377c982d-9686-450e-9a7c-22aeaf1bc162/7211f19f-262a-42eb-a02e-289956491741)
+
+Esto nos descargará tres máquinas virtuales:
+- Máquina atacante (kali)
+- Máquina victima servidor web (Ubuntu server)
 
 2. Descomprimir el contenido.
 3. Importar cada máquina en VMware:
@@ -273,7 +257,7 @@ ping 192.168.66.10
 
 Si la conectividad es correcta, acceder al portal web desde el navegador de Kali:
 
-```bash
+```
 http://192.168.66.10/portal_pyme/
 ```
 
@@ -281,7 +265,7 @@ http://192.168.66.10/portal_pyme/
 
 En caso de no utilizar las máquinas virtuales preconfiguradas, el laboratorio puede desplegarse manualmente.
 
-#### 1. Instalación en la máquina víctima
+#### 🧱 1. Instalación en la máquina víctima
 
 Una vez creada la máquina Ubuntu Server 22.04.4 y configurada su IP, ejecutar:
 
@@ -298,11 +282,12 @@ chmod +x lab/setup/install.sh
 bash lab/setup/install.sh
 ```
 
-#### 2. Configuración de la máquina atacante
+#### 🐉 2. Configuración de la máquina atacante
 
 En la máquina Kali Linux no es necesario instalar software adicional para el despliegue del laboratorio. Únicamente debe configurarse el adaptador de red en modo Host-only con la IP correspondiente.
 
-## Credenciales de acceso opcional
+
+## 🔐 Credenciales de acceso opcional
 
 Para mantener la misma configuración que las máquinas descargadas, deben configurarse las siguientes credenciales:
 
@@ -315,7 +300,8 @@ Para mantener la misma configuración que las máquinas descargadas, deben confi
 
 Una vez completados los pasos anteriores, el laboratorio quedará operativo y listo para comenzar las pruebas de seguridad desde la máquina atacante.
 
-## Fases de desarrollo del laboratorio
+
+## 🧠 Fases de desarrollo del laboratorio
 
 ### Fase 1 – Vulnerabilidades críticas iniciales
 
