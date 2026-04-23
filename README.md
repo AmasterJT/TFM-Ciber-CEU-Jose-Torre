@@ -212,6 +212,29 @@ iface eth1 inet static
 
 ## Despliegue e instalación del laboratorio
 
+
+### Modos de despliegue
+
+El laboratorio puede desplegarse en dos modos distintos, según el objetivo de uso:
+
+#### 1. Modo laboratorio local
+Este modo está pensado para pruebas individuales en una única máquina anfitriona. La red se configura como **Host-only**, de forma que la víctima y la máquina atacante quedan aisladas de la red física y solo pueden comunicarse dentro del entorno virtual. Esta opción es la más sencilla de reproducir y la más adecuada para desarrollo, validación inicial y documentación del laboratorio.
+
+---desplegable de como instalarlo---
+
+#### 2. Modo Red Team distribuido
+Este modo está pensado para ejercicios colaborativos o entornos más realistas. En lugar de depender de Host-only en un único PC, los participantes se conectan a una **VPN privada** o a una red interna compartida. De esta forma, cada miembro del equipo puede usar su propia máquina atacante y seguir accediendo a la víctima mediante su IP fija, siempre que esté dentro del mismo segmento de red o tenga acceso enrutado a esa subred.
+
+---desplegable de como instalarlo---
+
+#### Ventajas de este enfoque
+- Permite reutilizar la misma arquitectura tanto en pruebas locales como en ejercicios de equipo.
+- Facilita la escalabilidad del laboratorio.
+- Mejora la reproducibilidad del entorno.
+- Se acerca más a un escenario real de Red Team, donde los atacantes acceden a un entorno interno autorizado.
+
+
+
 El laboratorio puede ponerse en marcha de dos formas:
 
 - Importando las máquinas virtuales preconfiguradas.
@@ -230,7 +253,11 @@ Tanto si descargamos las máquinas virtuales como si las configuramos manualment
 
 #### 1. Descarga e importación
 
-1. Descargar los archivos comprimidos (`.zip`) de las máquinas virtuales.
+1. Descargar los archivos comprimidos (`.zip`) de las máquinas virtuales. 
+
+- [MEGA](https://mega.nz/folder/uuoWnTCa#gCMeFu6JBzY6sQEWtxb_SQ)
+- [OneDrive](https://outlook.cloud.microsoft/host/377c982d-9686-450e-9a7c-22aeaf1bc162/7211f19f-262a-42eb-a02e-289956491741)
+
 2. Descomprimir el contenido.
 3. Importar cada máquina en VMware:
    - **Archivo → Importar**
