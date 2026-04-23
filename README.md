@@ -191,6 +191,49 @@ network:
 6. ⚔️ Creación de la máquina `kali-atacante` → Instalación de Kali → Prueba de SQLi  
 
 ##
+
+
+# Instalación del laboratorio
+
+
+
+### 1️⃣ Descargar máquinas virtuales
+
+Descargar las máquinas virtuales (atacante y victima)
+
+[!descargar maquinas](https://outlook.cloud.microsoft/host/377c982d-9686-450e-9a7c-22aeaf1bc162/7211f19f-262a-42eb-a02e-289956491741)
+
+
+### 2️⃣ Importación
+
+1. Descargar el ZIP
+2. Descomprimir
+3. Importar en VMware:
+   Archivo → Importar servicio virtualizado → seleccionar .ovf
+
+## Instalación manual
+
+Creamos las maquinas virtual como se describe en el apartado [_**Máquinas virtuales**_](#máquinas-virtuales)
+
+En la maquina victima Ubuntu server, ejecutamos
+
+```bash 
+sudo apt update
+sudo apt install apache2 mysql-server php php-mysql -y
+
+# clonamos le repositorio
+git clone https://github.com/AmasterJT/TFM-Ciber-CEU-Jose-Torre
+cd TFM-Ciber-CEU-Jose-Torre
+sudo chmod +x lab/setup/install.sh
+bash lab/setup/install.sh
+```
+
+> [!NOTE]  
+> La maquina Kali no hace falta instalar nada, solo configurar la maquina virtual para que opere en la red host-only usando la ip especificada anteriormente
+
+Listo, ya tenemos el laboratorio operativo, podemos comenzar a explotar el portal web desde la máquina Kali
+
+
 # 🚀 Fases de desarrollo del laboratorio
 
 ---
