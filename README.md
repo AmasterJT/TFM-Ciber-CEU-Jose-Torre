@@ -162,7 +162,7 @@ network:
 sudo netplan apply
 ```
 
-> [!INFO]  
+> [!NOTE]  
 > Si se desea disponer de acceso a Internet en la máquina víctima, se puede añadir un segundo adaptador de red (por ejemplo, NAT) y configurar `netplan` de la siguiente forma:
 
 ```yaml
