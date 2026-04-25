@@ -1,3 +1,4 @@
+
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -10,7 +11,7 @@ include 'includes/header.php';
 
 <main class="content login-content">
     <div class="login-page">
-        <div class="login-card" >
+        <div class="login-card">
             <h3>Inicio de sesión</h3>
 
             <?php
@@ -18,26 +19,29 @@ include 'includes/header.php';
                 $user = $_POST['username'] ?? '';
                 $pass = $_POST['password'] ?? '';
 
-                // Filtro incompleto a propósito
-                $user = str_replace([" OR ", " or ", "--"], "", $user);
-                $pass = str_replace([" OR ", " or ", "--"], "", $pass);
+                $result = $conn->query("SELECT * FROM empleados WHERE username = '$user'");
 
-                $query = "SELECT * FROM empleados WHERE username = '$user' AND password = '$pass'";
-                $result = $conn->query($query);
+                if ($result && $result->num_rows > 0) {
+                    // Simula comprobación de password más costosa
+                    usleep(600000); // 0.6 segundos
 
-                if ($result->num_rows > 0) {
-                    $empleado = $result->fetch_assoc();
+                    $query = "SELECT * FROM empleados WHERE username = '$user' AND password = '$pass'";
+                    $login = $conn->query($query);
 
-                    $_SESSION['empleado_id'] = $empleado['id'];
-                    $_SESSION['username'] = $empleado['username'];
-                    $_SESSION['rol'] = $empleado['rol'];
-                    $_SESSION['email'] = $empleado['email'];
+                    if ($login && $login->num_rows > 0) {
+                        $empleado = $login->fetch_assoc();
 
-                    header("Location: /portal_pyme/perfil.php");
-                    exit;
-                } else {
-                    echo '<div class="notice">Usuario o contraseña incorrectos</div>';
+                        $_SESSION['empleado_id'] = $empleado['id'];
+                        $_SESSION['username'] = $empleado['username'];
+                        $_SESSION['rol'] = $empleado['rol'];
+                        $_SESSION['email'] = $empleado['email'];
+
+                        header("Location: /portal_pyme/perfil.php");
+                        exit;
+                    }
                 }
+
+                echo '<div class="notice">Usuario o contraseña incorrectos</div>';
             }
             ?>
 
