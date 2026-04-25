@@ -18,6 +18,10 @@ include 'includes/header.php';
                 $user = $_POST['username'] ?? '';
                 $pass = $_POST['password'] ?? '';
 
+                // Filtro incompleto a propósito
+                $user = str_replace([" OR ", " or ", "--"], "", $user);
+                $pass = str_replace([" OR ", " or ", "--"], "", $pass);
+
                 $query = "SELECT * FROM empleados WHERE username = '$user' AND password = '$pass'";
                 $result = $conn->query($query);
 

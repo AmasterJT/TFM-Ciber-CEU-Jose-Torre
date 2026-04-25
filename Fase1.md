@@ -99,3 +99,37 @@ Cada vulnerabilidad debe tener:
 
 - Desarrollo
 - Resultados
+
+
+
+---
+---
+
+💡 Mejora (clave 🔑)
+
+Diseña una cadena así:
+
+1. Recon (dirsearch / gobuster)
+2. Encuentra endpoint raro
+3. SQLi → credenciales
+4. Login
+5. IDOR → ver otros usuarios
+6. Subida archivo → RCE
+7. Reverse shell
+8. Privilege escalation (sudo mal configurado)
+🧨 3. Idea de evolución brutal (te la dejo hecha)
+
+Si quieres subirlo a nivel top:
+
+🧩 FASE 1 (tu actual, pero refinada)
+SQLi (pero con filtro básico)
+Login bypass
+IDOR en clientes
+🔐 FASE 2
+Hashes débiles (MD5)
+Session fixation
+Cookie manipulable
+💀 FASE 3
+Upload bypass → webshell
+Cron vulnerable
+SUID binary
