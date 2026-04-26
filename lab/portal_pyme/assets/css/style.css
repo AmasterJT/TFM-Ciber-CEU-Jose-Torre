@@ -567,3 +567,51 @@ table td {
     margin-bottom: 20px;
     font-size: 1.35rem;
 }
+
+.upload-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.custom-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.file-button {
+    display: inline-block;
+    background: #374151;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.file-button:hover {
+    background: #1f2937;
+}
+
+.file-name {
+    color: #6b7280;
+    font-size: 0.9rem;
+    word-break: break-word;
+}
+
+.upload-submit {
+    width: fit-content;
+    background: #2563eb;
+    margin-top: 4px;
+}
+
+.upload-submit:hover {
+    background: #1d4ed8;
+}

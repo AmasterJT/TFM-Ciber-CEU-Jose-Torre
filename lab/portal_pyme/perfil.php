@@ -132,11 +132,31 @@ include 'includes/sidebar.php';
     <div class="card">
         <h3>Subir foto de perfil</h3>
 
-        <form method="POST" enctype="multipart/form-data">
-            <label for="foto">Seleccionar archivo</label>
-            <input type="file" id="foto" name="foto">
-            <input type="submit" name="upload" value="Subir archivo">
-        </form>
+	<form method="POST" enctype="multipart/form-data" class="upload-profile-form">
+	    <label for="foto">Seleccionar archivo</label>
+
+	    <div class="custom-file-upload">
+		<input type="file" id="foto" name="foto" onchange="showFileName(this)">
+
+		<label for="foto" class="file-button">📁 Explorar archivo</label>
+	    	<input type="submit" name="upload" value="Subir archivo" class="upload-submit">
+	    </div>
+
+	    <span id="file-name" class="file-name">Ningún archivo seleccionado</span>
+
+
+	</form>
+	<script>
+		function showFileName(input) {
+		    const fileName = document.getElementById('file-name');
+
+		    if (input.files && input.files.length > 0) {
+			fileName.textContent = input.files[0].name + " ✅";
+		    } else {
+			fileName.textContent = "Ningún archivo seleccionado";
+		    }
+		}
+	</script>
     </div>
 </div>
 
@@ -146,10 +166,6 @@ include 'includes/sidebar.php';
     <?php if ($empleado): ?>
         <div class="table-wrapper">
             <table>
-                <tr>
-                    <th>ID</th>
-                    <td><?php echo htmlspecialchars($empleado['id']); ?></td>
-                </tr>
                 <tr>
                     <th>Usuario</th>
                     <td><?php echo htmlspecialchars($empleado['username']); ?></td>
@@ -162,6 +178,11 @@ include 'includes/sidebar.php';
                     <th>Email</th>
                     <td><?php echo htmlspecialchars($empleado['email']); ?></td>
                 </tr>
+                <tr>
+                    <th>Departamento</th>
+                    <td><?php echo $empleado['departamento']; ?></td>
+                </tr>
+
             </table>
         </div>
     <?php else: ?>
