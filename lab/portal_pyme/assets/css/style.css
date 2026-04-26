@@ -737,3 +737,18 @@ table td {
     background: #1d4ed8;
     text-decoration: none;
 }
+
+
+.back-arrow {
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 10px;
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.back-arrow:hover {
+    text-decoration: underline;
+}

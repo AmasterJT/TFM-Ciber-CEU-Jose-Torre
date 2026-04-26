@@ -8,6 +8,10 @@ include 'includes/header.php';
 <main class="content login-content">
     <div class="login-page">
         <div class="login-card">
+            
+            <a href="/portal_pyme/index.php" class="back-arrow">Volver</a>
+           
+
             <h3>Inicio de sesión</h3>
             <?php
             if ($_SERVER["REQUEST_METHOD"] === "POST") {
