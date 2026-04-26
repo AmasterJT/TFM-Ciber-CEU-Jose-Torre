@@ -25,7 +25,7 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
 <div class="card">
     <h3>Estado de incidencia</h3>
 
-    <p>
+    <p style="padding-bottom: 1em;">
         Si todavía no tiene un código de seguimiento,
         <a href="#" onclick="openTicketModal(); return false;">cree un nuevo ticket</a>.
     </p>

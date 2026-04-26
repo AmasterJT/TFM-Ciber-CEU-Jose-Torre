@@ -717,3 +717,23 @@ table td {
     margin: 0;
     line-height: 1;      /* Ayuda a que el 'box' del texto sea exacto */
 }
+
+.muted {
+    color: #6b7280;
+    margin-bottom: 16px;
+}
+
+.btn-link {
+    display: inline-block;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.btn-link:hover {
+    background: #1d4ed8;
+    text-decoration: none;
+}
