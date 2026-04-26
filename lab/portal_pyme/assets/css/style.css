@@ -635,12 +635,12 @@ table td {
 }
 
 .modal-close-x {
-    background: #e5e7eb;
-    color: #111827;
+    color: #e5e7eb;
+    background: #920303;
     border: none;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
+    min-width: 0 !important;
+    width: 50px;
+    padding: 2px 2px 2px 2px;
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
@@ -650,7 +650,7 @@ table td {
 }
 
 .modal-close-x:hover {
-    background: #d1d5db;
+    background: #b92828;
 }
 
 .ticket-modal-box {
@@ -674,4 +674,46 @@ table td {
 
 .secondary-btn:hover {
     background: #4b5563;
+}
+
+
+.input-error {
+    border: 2px solid red;
+    background: #ffe5e5;
+}
+
+.field-error {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.modal-overlay {
+    position: fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.5);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal-box {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:400px;
+}
+
+.field-group {
+    display: flex;       /* Activa el modo flex */
+    align-items: center; /* Alinea los elementos al centro verticalmente */
+    gap: 8px;            /* Controla la separación horizontal entre ellos */
+}
+
+/* Opcional: Para asegurar que no hereden márgenes que los muevan */
+.field-group label, 
+.field-group .field-error {
+    margin: 0;
+    line-height: 1;      /* Ayuda a que el 'box' del texto sea exacto */
 }

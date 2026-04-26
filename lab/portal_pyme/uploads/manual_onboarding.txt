@@ -1,4 +1,0 @@
-Manual de bienvenida Portal PYME
-- Cambiar contraseñas iniciales tras el primer acceso.
-- Reportar incidencias mediante el módulo de tickets.
-- Contacto interno: soporte@portalpyme.local

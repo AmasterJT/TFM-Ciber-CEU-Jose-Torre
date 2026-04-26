@@ -57,7 +57,8 @@ INSERT INTO empleados (id, username, password, email, rol, departamento) VALUES
 (2, 'soporte', 'soporte123', 'soporte@portalpyme.local', 'empleado', 'Soporte'),
 (3, 'jtorre', 'Invierno2026', 'j.torre@portalpyme.local', 'empleado', 'Comercial'),
 (4, 'mgarcia', 'clientes2026', 'm.garcia@portalpyme.local', 'empleado', 'Comercial'),
-(5, 'contabilidad', 'Conta2026!', 'contabilidad@portalpyme.local', 'empleado', 'Administracion');
+(5, 'contabilidad', 'Conta2026!', 'contabilidad@portalpyme.local', 'empleado', 'Administracion'),
+(6, 'juan', 'juan123', 'juan@portalpyme.local', 'empleado', 'Soporte');
 
 INSERT INTO clientes (id, empresa, nombre, email, telefono, owner_id, notas) VALUES
 (1, 'Norte Digital SL', 'Ana Ruiz', 'ana.ruiz@nortedigital.local', '+34 600 111 001', 3, 'Cliente asignado a jtorre. Renovación prevista en mayo.'),
