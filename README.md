@@ -300,6 +300,18 @@ Para mantener la misma configuración que las máquinas descargadas, deben confi
 
 Una vez completados los pasos anteriores, el laboratorio quedará operativo y listo para comenzar las pruebas de seguridad desde la máquina atacante.
 
+## 🏢 Portal PYME Vulnerable – Enfoque y Diseño
+### 📌 Descripción general
+
+Este proyecto consiste en el desarrollo de un portal web corporativo simulado orientado a representar el entorno tecnológico típico de una pequeña o mediana empresa (PYME).
+
+El objetivo principal es construir una máquina vulnerable realista que permita practicar técnicas de pentesting y Red Team, siguiendo una estructura similar a plataformas como Hack The Box o TryHackMe.
+
+El portal incluye funcionalidades habituales en entornos empresariales, como gestión de empleados, clientes y tickets de soporte, integrando vulnerabilidades de forma intencionada para su explotación controlada.
+
+> [!NOTE]
+> Para mas informacion leer el fichero `creacion-portal-pyme.md` 
+
 
 ## 🧠 Fases de desarrollo del laboratorio
 
