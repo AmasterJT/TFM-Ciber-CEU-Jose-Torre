@@ -12,18 +12,15 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="/portal_pyme/assets/css/style.css">
 </head>
 <body>
-
 <header class="topbar">
-    <h1>Portal PYME · Intranet de Gestión</h1>
-
+    <h1>Portal PYME · Gestión y Soporte</h1>
     <div class="topbar-text">
         <?php if (isset($_SESSION['username'])): ?>
-            Bienvenido, <strong><?php echo $_SESSION['username']; ?></strong> |
+            Bienvenido, <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong> |
             <a href="/portal_pyme/logout.php" class="logout-btn">Cerrar sesión</a>
         <?php else: ?>
-            Entorno interno corporativo
+            Plataforma corporativa de clientes e incidencias
         <?php endif; ?>
     </div>
 </header>
-
 <div class="layout">
