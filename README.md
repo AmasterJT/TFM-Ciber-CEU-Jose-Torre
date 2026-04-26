@@ -12,12 +12,16 @@
 - [Metodología](#metodología)
 - [OWASP Top 10 2025](#owasp-top-10-2025)
 - [Arquitectura del laboratorio](#arquitectura-del-laboratorio)
+- [Diseño del portal vulnerable](#-portal-pyme-vulnerable--enfoque-y-diseño)
 - [Despliegue e instalación del laboratorio](#despliegue-e-instalación-del-laboratorio)
 - [Credenciales de acceso](#credenciales-de-acceso-opcional)
 - [Puesta en marcha](#puesta-en-marcha)
 - [Fases de desarrollo del laboratorio](#fases-de-desarrollo-del-laboratorio)
 - [Justificación global del orden de las fases](#justificación-global-del-orden-de-las-fases)
 - [Resultados esperados](#resultados-esperados-medibles)
+
+> [!WARNING]  
+> Tanot la estructura como el diseño del laboratorio puede sufrif cambios a mendida que lo creamos
 
 ---
 
