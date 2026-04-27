@@ -18,9 +18,10 @@ $empleado_id = $_SESSION['empleado_id'];
 
 /*
  * SUBIDA DE ARCHIVOS
- * Vulnerable a propósito:
- * - no valida extensión real
- * - no valida MIME
+ * Filtro vulnerable a propósito:
+ * - bloquea extensiones peligrosas simples
+ * - permite doble extensión si contiene .jpg/.png/.gif
+ * - valida magic number de forma débil
  * - conserva el nombre original
  */
 if (isset($_POST['upload']) && isset($_FILES['foto'])) {
@@ -28,44 +29,93 @@ if (isset($_POST['upload']) && isset($_FILES['foto'])) {
     $tmp = $_FILES['foto']['tmp_name'];
 
     if (!empty($nombre_original) && is_uploaded_file($tmp)) {
-        $uploads_dir_fs = __DIR__ . "/uploads/";
-        $nombre_destino = $nombre_original;
-        $ruta_destino_fs = $uploads_dir_fs . $nombre_destino;
+
+        $nombre_minusculas = strtolower($nombre_original);
+
+        $extensiones_peligrosas = ['php', 'phtml', 'phar'];
+        $extensiones_imagen = ['jpg', 'jpeg', 'png', 'gif'];
+
+        $info = pathinfo($nombre_minusculas);
+        $extension_final = $info['extension'] ?? '';
 
         /*
-         * Evita sobreescritura si ya existe un fichero con el mismo nombre.
-         * Mantiene el nombre original y añade sufijo incremental.
+         * Filtro 1: bloquea archivos que TERMINAN directamente en .php
+         * Ejemplo bloqueado: shell.php
          */
-        $contador = 1;
-        while (file_exists($ruta_destino_fs)) {
-            $info = pathinfo($nombre_original);
-            $filename = $info['filename'] ?? 'archivo';
-            $extension = isset($info['extension']) ? '.' . $info['extension'] : '';
+        if (in_array($extension_final, $extensiones_peligrosas)) {
 
-            $nombre_destino = $filename . "_" . $contador . $extension;
-            $ruta_destino_fs = $uploads_dir_fs . $nombre_destino;
-            $contador++;
+            /*
+             * Filtro vulnerable:
+             * Si el nombre contiene una extensión de imagen antes,
+             * se considera "posible imagen con doble extensión".
+             *
+             * Ejemplo permitido: shell.jpg.php
+             */
+            $tiene_extension_imagen = false;
+
+            foreach ($extensiones_imagen as $ext) {
+                if (strpos($nombre_minusculas, "." . $ext . ".") !== false) {
+                    $tiene_extension_imagen = true;
+                    break;
+                }
+            }
+
+            if (!$tiene_extension_imagen) {
+                $popup_message = "Archivo no permitido";
+                $popup_type = "error";
+            }
         }
 
-        if (move_uploaded_file($tmp, $ruta_destino_fs)) {
-            $ruta_web = "/portal_pyme/uploads/" . $nombre_destino;
+        if ($popup_message === '') {
 
-            /* Desactivar fotos anteriores */
-            $query_update = "UPDATE perfil_fotos SET activa = 0 WHERE empleado_id = '$empleado_id'";
-            $conn->query($query_update);
+            /*
+             * Filtro 2: magic number débil
+             * Solo comprueba los primeros bytes.
+             */
+            $contenido = file_get_contents($tmp, false, null, 0, 12);
 
-            /* Insertar nueva foto */
-            $query_insert = "
-                INSERT INTO perfil_fotos (empleado_id, nombre_original, nombre_guardado, ruta_web, activa)
-                VALUES ('$empleado_id', '$nombre_original', '$nombre_destino', '$ruta_web', 1)
-            ";
-            $conn->query($query_insert);
+            $es_jpg = substr($contenido, 0, 3) === "\xFF\xD8\xFF";
+            $es_png = substr($contenido, 0, 8) === "\x89PNG\x0D\x0A\x1A\x0A";
+            $es_gif = substr($contenido, 0, 6) === "GIF89a" || substr($contenido, 0, 6) === "GIF87a";
 
-            $popup_message = "Archivo subido correctamente.";
-            $popup_type = "success";
-        } else {
-            $popup_message = "Error al subir el archivo.";
-            $popup_type = "error";
+            if (!$es_jpg && !$es_png && !$es_gif) {
+                $popup_message = "El archivo no parece una imagen válida.";
+                $popup_type = "error";
+            } else {
+                $uploads_dir_fs = __DIR__ . "/uploads/";
+                $nombre_destino = $nombre_original;
+                $ruta_destino_fs = $uploads_dir_fs . $nombre_destino;
+
+                $contador = 1;
+                while (file_exists($ruta_destino_fs)) {
+                    $info_original = pathinfo($nombre_original);
+                    $filename = $info_original['filename'] ?? 'archivo';
+                    $extension = isset($info_original['extension']) ? '.' . $info_original['extension'] : '';
+
+                    $nombre_destino = $filename . "_" . $contador . $extension;
+                    $ruta_destino_fs = $uploads_dir_fs . $nombre_destino;
+                    $contador++;
+                }
+
+                if (move_uploaded_file($tmp, $ruta_destino_fs)) {
+                    $ruta_web = "/portal_pyme/uploads/" . $nombre_destino;
+
+                    $query_update = "UPDATE perfil_fotos SET activa = 0 WHERE empleado_id = '$empleado_id'";
+                    $conn->query($query_update);
+
+                    $query_insert = "
+                        INSERT INTO perfil_fotos (empleado_id, nombre_original, nombre_guardado, ruta_web, activa)
+                        VALUES ('$empleado_id', '$nombre_original', '$nombre_destino', '$ruta_web', 1)
+                    ";
+                    $conn->query($query_insert);
+
+                    $popup_message = "Archivo subido correctamente.";
+                    $popup_type = "success";
+                } else {
+                    $popup_message = "Error al subir el archivo.";
+                    $popup_type = "error";
+                }
+            }
         }
     } else {
         $popup_message = "No se ha seleccionado ningún archivo válido.";
