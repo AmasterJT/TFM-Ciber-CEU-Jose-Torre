@@ -752,3 +752,18 @@ table td {
 .back-arrow:hover {
     text-decoration: underline;
 }
+
+.search-summary {
+    margin-top: 18px;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+    border-radius: 6px;
+    color: #334155;
+    font-size: 0.95rem;
+}
+
+.search-summary strong {
+    color: #111827;
+}

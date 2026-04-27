@@ -10,6 +10,7 @@ include 'includes/sidebar.php';
 
 $codigo = $_GET['codigo'] ?? '';
 
+
 $ticket_flash = $_SESSION['ticket_flash'] ?? null;
 $ticket_errors = $_SESSION['ticket_errors'] ?? [];
 $ticket_old = $_SESSION['ticket_form_old'] ?? [];
@@ -25,15 +26,16 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
 <div class="card">
     <h3>Estado de incidencia</h3>
 
-    <p style="padding-bottom: 1em;">
+    <p style="padding-bottom: 2em;">
         Si todavía no tiene un código de seguimiento,
         <a href="#" onclick="openTicketModal(); return false;">cree un nuevo ticket</a>.
     </p>
 
     <form method="GET">
-        <input type="text" name="codigo" placeholder="Código de ticket">
+        <input type="text" name="codigo" placeholder="Código de ticket" >
         <input type="submit" value="Consultar">
     </form>
+
 
     <?php if ($codigo !== ''): ?>
 
@@ -50,12 +52,13 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
         $result = $conn->query($query);
         ?>
 
+        
         <?php if ($result && $result->num_rows > 0): ?>
 
             <div class="table-wrapper" style="margin-top:20px;">
                 <table>
                     <tr>
-                        <th>Código</th>
+                        <th>Codigo</th>
                         <th>Asunto</th>
                         <th>Estado</th>
                         <th>Prioridad</th>
@@ -66,7 +69,7 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
                         <tr>
                             <td><?php echo htmlspecialchars($row['codigo']); ?></td>
                             <td><?php echo htmlspecialchars($row['asunto']); ?></td>
-                            <td><?php echo htmlspecialchars($row['estado']); ?></td>
+                            <td><?php echo $row['asunto']; ?></td>
                             <td><?php echo htmlspecialchars($row['prioridad']); ?></td>
                             <td><?php echo htmlspecialchars($row['empleado_asignado']); ?></td>
                         </tr>
