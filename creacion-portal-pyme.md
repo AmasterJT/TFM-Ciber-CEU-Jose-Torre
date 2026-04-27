@@ -1,298 +1,198 @@
-# 🧪 Ruta de despliegue del laboratorio (TFM)
+# 🏢 Portal PYME Vulnerable – Enfoque y Diseño
 
-Te organizo el trabajo en una **ruta progresiva (de menos a más complejidad)** para que avances sin bloquearte y sin rehacer todo desde cero.
+## 📌 Descripción general
 
-## 🎯 Enfoque general
+Este proyecto consiste en el desarrollo de un **portal web corporativo simulado** orientado a representar el entorno tecnológico típico de una pequeña o mediana empresa (PYME).
 
-- **Nivel 1:** Mejorar DVWA con módulos más realistas  
-- **Nivel 2:** Crear una miniaplicación propia  
-- **Nivel 3:** Mantener DVWA + portal vulnerable propio (**recomendado para TFM**)  
+El objetivo principal es construir una **máquina vulnerable realista** que permita practicar técnicas de pentesting y Red Team, siguiendo una estructura similar a plataformas como Hack The Box o TryHackMe.
 
-👉 Para un TFM sólido, el objetivo final es el **Nivel 3**, pero conviene pasar por los anteriores.
+El portal incluye funcionalidades habituales en entornos empresariales, como gestión de empleados, clientes y tickets de soporte, integrando vulnerabilidades de forma intencionada para su explotación controlada.
 
 ---
 
-# 🔹 Nivel 1 — Mejora rápida sobre DVWA
+## 🎯 Objetivo del portal
 
-## 🎯 Objetivo
-Aprovechar DVWA y añadir páginas con apariencia de intranet/empresa.
+El portal no está diseñado como una aplicación segura, sino como un **escenario de ataque progresivo**, donde el usuario debe:
 
-## ✅ Resultado esperado
-Laboratorio más creíble sin desarrollar todo desde cero.
+* 🔍 Enumerar la superficie de ataque
+* 🚪 Obtener acceso inicial
+* 🔐 Escalar privilegios
+* 🧠 Identificar fallos de diseño y configuración
 
----
-
-## 📁 Estructura
-
-```
-/var/www/html/DVWA/fase1-tfm/
-    admin_custom/
-        index.php
-    clientes_custom/
-        index.php
-    login_custom/
-        index.php
-    pedidos_custom/
-        index.php
-```
-
----
----
-
-## ⚙️ Paso 1 — Comprobar servicios
-
-```bash
-sudo systemctl status apache2
-sudo systemctl status mysql
-```
-
-Abrir en navegador:
-
-```
-http://192.168.66.10/DVWA/
-```
+Todo ello siguiendo una cadena de ataque realista.
 
 ---
 
-## 📂 Paso 2 — Crear directorios
+## 🧩 Enfoque de diseño
 
-```bash
-cd /var/www/html/DVWA/fase1-tfm/
-sudo mkdir login_custom clientes_custom pedidos_custom admin_custom
-```
+El diseño del portal sigue tres principios clave:
+
+### 1. Realismo
+
+Se simula una intranet corporativa con:
+
+* Panel de empleados
+* Gestión de clientes
+* Sistema de tickets
+* Subida de archivos
+* Panel administrativo
+
+El objetivo es que el entorno sea creíble y cercano a escenarios reales.
 
 ---
 
-## 🧱 Paso 3 — Crear páginas base
+### 2. Vulnerabilidades no evidentes
 
-```bash
-sudo nano login_custom/index.php
-sudo nano clientes_custom/index.php
-sudo nano pedidos_custom/index.php
-sudo nano admin_custom/index.php
+Las vulnerabilidades no están expuestas de forma directa, sino que requieren:
+
+* Enumeración previa
+* Análisis del comportamiento de la aplicación
+* Encadenamiento de fallos
+
+Esto evita soluciones triviales y fomenta el aprendizaje práctico.
+
+---
+
+### 3. Cadena de ataque (Kill Chain)
+
+El portal está diseñado para ser explotado en fases:
+
+```text
+Reconocimiento → Enumeración → Acceso inicial → Post-explotación
 ```
 
 ---
 
-## 🗄️ Paso 4 — Base de datos
+## 🗂️ Estructura del portal
 
-```sql
-USE dvwa;
-
-CREATE TABLE clientes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    email VARCHAR(100),
-    telefono VARCHAR(20),
-    empresa VARCHAR(100),
-    propietario INT
-);
-
-CREATE TABLE pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT,
-    descripcion VARCHAR(255),
-    estado VARCHAR(50),
-    importe DECIMAL(10,2),
-    owner_id INT
-);
-
-CREATE TABLE empleados (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50),
-    password VARCHAR(100),
-    rol VARCHAR(20),
-    email VARCHAR(100)
-);
-```
-
----
-
-## 🧨 Paso 5 — Vulnerabilidades
-
-### Login
-- SQLi
-- Sin rate limit
-- Errores detallados
-
-### Clientes
-- SQLi en búsqueda
-- Fuga de datos
-- Sin control de acceso
-
-### Pedidos
-- IDOR
-- Manipulación de parámetros
-
-### Admin
-- Acceso directo sin autenticación
-
----
-
-## 🔗 Paso 6 — Navegación
-
-```html
-<a href="../login_custom/index.php">Login</a> |
-<a href="../clientes_custom/index.php">Clientes</a> |
-<a href="../pedidos_custom/index.php">Pedidos</a> |
-<a href="../admin_custom/index.php">Admin</a>
-```
-
----
-
-## 🧪 Paso 7 — Pruebas
-
-- Navegador
-- SQLi manual
-- Burp Suite
-- sqlmap
-
----
-
-## 📝 Paso 8 — Documentación
-
-Para cada módulo:
-
-- URL
-- Vulnerabilidad
-- Parámetro vulnerable
-- Impacto
-- Explotación
-- Mitigación
-
----
-
-# 🔹 Nivel 2 — Miniportal propio
-
-## 📁 Ruta
-
-```
-/var/www/html/portal_pyme/
-```
-
----
-
-## ⚙️ Estructura
-
-```
+```text
 portal_pyme/
-    index.php
-    login.php
-    dashboard.php
-    clientes.php
-    ticket.php
-    perfil.php
-    admin.php
-    config/db.php
-    includes/header.php
-    includes/footer.php
+├── index.php              # Página pública
+├── login.php              # Acceso empleados (enumeración por timing)
+├── estado_ticket.php      # Consulta pública (posible SQLi)
+├── dashboard.php          # Panel interno
+├── perfil.php             # Perfil + subida de archivos (vector RCE)
+├── clientes.php           # Listado clientes
+├── cliente_detalle.php    # IDOR
+├── tickets.php            # Gestión interna
+├── documentos.php         # Ficheros internos
+├── uploads/               # Archivos subidos (riesgo crítico)
+├── admin/                 # Panel administrativo
+├── backup/                # Backups expuestos
 ```
 
 ---
 
-## 🗄️ Base de datos
+## ⚠️ Vulnerabilidades incluidas (Fase 1)
 
-```sql
-CREATE DATABASE portal_pyme;
-USE portal_pyme;
+El portal implementa vulnerabilidades alineadas con OWASP Top 10:
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50),
-    password VARCHAR(100),
-    nombre VARCHAR(100),
-    email VARCHAR(100),
-    rol VARCHAR(20)
-);
+### 🔓 Broken Access Control
+
+* IDOR en `cliente_detalle.php`
+* Acceso indebido a información de otros usuarios
+
+---
+
+### 💉 Injection
+
+* SQL Injection en `estado_ticket.php`
+* Login vulnerable a bypass
+
+---
+
+### ⚙️ Security Misconfiguration
+
+* `display_errors` activado
+* Carpeta `/uploads` con permisos inseguros
+* Backup accesible públicamente
+
+---
+
+### 🧠 Insecure Design
+
+* Falta de validación en subida de archivos
+* Flujo de autenticación débil
+
+---
+
+### 🔑 Authentication Issues
+
+* Enumeración de usuarios por timing en `login.php`
+
+---
+
+## 🧨 Vector clave: Subida de archivos
+
+El módulo de perfil permite subir archivos sin validación:
+
+* ❌ No se comprueba extensión
+* ❌ No se valida MIME
+* ❌ Se conserva el nombre original
+
+Esto permite:
+
+```text
+Subida de webshell → ejecución remota de código (RCE)
 ```
 
 ---
 
-## 🎨 UI
+## 🔗 Cadena de ataque esperada
 
-Añadir Bootstrap:
+Ejemplo de explotación:
 
-```html
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+```text
+1. Descubrimiento de endpoints públicos
+2. SQLi en estado_ticket.php
+3. Enumeración de usuarios
+4. Identificación de "superadmin"
+5. Login bypass
+6. Acceso a zona privada
+7. IDOR en clientes
+8. Subida de archivo malicioso
+9. Ejecución remota
 ```
 
 ---
 
-## 🧨 Vulnerabilidades clave
+## 🧠 Filosofía del laboratorio
 
-- SQLi (login, búsqueda)
-- IDOR
-- Broken Access Control
-- Security Misconfiguration
+Este portal no busca enseñar únicamente vulnerabilidades aisladas, sino:
 
----
+* Cómo se **descubren**
+* Cómo se **encadenan**
+* Cómo se **explotan en contexto real**
 
-# 🔹 Nivel 3 — Arquitectura híbrida (RECOMENDADO)
-
-## 🏗️ Estructura final
-
-```
-/var/www/html/DVWA/
-/var/www/html/portal_pyme/
-```
+Se prioriza el aprendizaje práctico frente a la teoría.
 
 ---
 
-## 🎯 Objetivo
+## 🚨 Advertencia
 
-- DVWA → referencia académica  
-- portal_pyme → caso realista (TU TFM)
+Este proyecto es exclusivamente educativo.
 
----
-
-## 🎭 Narrativa
-
-- DVWA = entorno de entrenamiento  
-- portal_pyme = empresa ficticia  
+No debe desplegarse en entornos accesibles desde Internet ni utilizarse fuera de un laboratorio controlado.
 
 ---
 
-## 🧪 Escenarios de ataque
+## 📈 Evolución futura
 
-1. SQLi en login  
-2. IDOR en clientes  
-3. Acceso a pedidos ajenos  
-4. Acceso directo a admin  
-5. Enumeración de usuarios  
+El portal está diseñado para ampliarse en fases posteriores:
 
----
-
-## 📊 OWASP cubierto
-
-- A01 Broken Access Control  
-- A02 Security Misconfiguration  
-- A05 Injection  
+* 🔐 Fallos criptográficos
+* 🧩 Persistencia y escalada de privilegios
+* 📜 Falta de logging
+* 🧱 Evasión de mecanismos de detección
 
 ---
 
-# 🚀 Recomendación final
+## 🏁 Conclusión
 
-### Plan realista
+El portal PYME vulnerable representa un entorno realista y progresivo para el aprendizaje de ciberseguridad ofensiva, combinando:
 
-**Semana 1**
-- Nivel 1
+* Diseño creíble
+* Vulnerabilidades prácticas
+* Enfoque metodológico
 
-**Semana 2**
-- Nivel 2
-
-**Semana 3**
-- Nivel 3 + documentación
-
----
-
-## 🧠 Estrategia
-
-- Mantener DVWA funcionando  
-- Crear portal propio  
-- Introducir vulnerabilidades reales  
-- Atacar desde Kali  
-- Documentar explotación y mitigación  
-
----
-
-💡 Resultado: laboratorio sólido, profesional y defendible.
+Ideal para simular escenarios de Red Team en un entorno controlado.
