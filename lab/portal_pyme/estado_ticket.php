@@ -34,6 +34,55 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
         <input type="text" name="codigo" placeholder="Código de ticket">
         <input type="submit" value="Consultar">
     </form>
+
+    <?php if ($codigo !== ''): ?>
+
+        <?php
+        // Vulnerable a propósito (para tu lab)
+        $codigo_filtrado = str_replace(["--", "/*", "*/"], "", $codigo);
+
+        $query = "
+            SELECT codigo, asunto, descripcion, estado, prioridad, empleado_asignado
+            FROM tickets
+            WHERE codigo = '$codigo_filtrado'
+        ";
+
+        $result = $conn->query($query);
+        ?>
+
+        <?php if ($result && $result->num_rows > 0): ?>
+
+            <div class="table-wrapper" style="margin-top:20px;">
+                <table>
+                    <tr>
+                        <th>Código</th>
+                        <th>Asunto</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Asignado</th>
+                    </tr>
+
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['codigo']); ?></td>
+                            <td><?php echo htmlspecialchars($row['asunto']); ?></td>
+                            <td><?php echo htmlspecialchars($row['estado']); ?></td>
+                            <td><?php echo htmlspecialchars($row['prioridad']); ?></td>
+                            <td><?php echo htmlspecialchars($row['empleado_asignado']); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </table>
+            </div>
+
+        <?php else: ?>
+
+            <script>
+                alert("No se encontró ningún ticket con ese código.");
+            </script>
+
+        <?php endif; ?>
+
+    <?php endif; ?>
 </div>
 
 <!-- MODAL -->

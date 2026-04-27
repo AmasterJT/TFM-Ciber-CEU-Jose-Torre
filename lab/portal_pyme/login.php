@@ -43,10 +43,20 @@ include 'includes/header.php';
             ?>
             <form method="POST">
                 <label for="username">Usuario</label>
-                <input type="text" id="username" name="username" autocomplete="off">
+                <input type="text" id="username" name="username" autocomplete="off" oninput="badUsernameFilter(this)">
                 <label for="password">Contraseña</label>
                 <input type="password" id="password" name="password">
                 <input type="submit" value="Entrar">
+
+                <script>
+                function badUsernameFilter(input) {
+                    if (input.value.includes("'") || nput.value.includes("#")) {
+                    input.value = input.value.replace("'", "");
+                    input.value = input.value.replace("#", "");
+                    }
+                }
+                </script>
+
             </form>
         </div>
     </div>
