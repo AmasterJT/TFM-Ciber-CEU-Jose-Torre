@@ -18,8 +18,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: portal_pyme
-      MYSQL_USER: tfm
-      MYSQL_PASSWORD: tfm123
+      MYSQL_USER: portal
+      MYSQL_PASSWORD: portal123
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
