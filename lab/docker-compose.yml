@@ -1,0 +1,30 @@
+services:
+  web:
+    build: ./docker/web
+    container_name: tfm_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+      - ./shared:/shared
+    depends_on:
+      - db
+    networks:
+      - tfm_lab
+
+  db:
+    image: mysql:8.0
+    container_name: tfm_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: portal_pyme
+      MYSQL_USER: tfm
+      MYSQL_PASSWORD: tfm123
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - tfm_lab
+
+networks:
+  tfm_lab:
+    driver: bridge
