@@ -91,3 +91,7 @@ notes/private/
 .local/
 cache/
 temp/
+
+# Portal Pyme uploads - no guardamos ningún archivo subido por el usuario
+lab/app/portal_pyme/uploads/*
+!.gitignore
