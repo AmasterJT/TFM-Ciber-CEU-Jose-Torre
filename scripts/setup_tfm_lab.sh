@@ -110,7 +110,7 @@ install_dependencies() {
     print_info "Instalando dependencias base..."
 
     apt-get update
-    apt-get install -y ca-certificates curl gnupg lsb-release openssh-server sudo
+    apt-get install -y ca-certificates curl gnupg lsb-release openssh-server sudo rsync
 
     if ! command -v docker >/dev/null 2>&1; then
         print_info "Instalando Docker desde el repositorio oficial..."
@@ -188,6 +188,7 @@ configure_users_and_groups() {
         print_ok "Usuario ${DEV_USER} actualizado."
     fi
 
+
     # Permitir a victima gestionar Docker si existe como usuario de administración del laboratorio.
     usermod -aG docker "${VICTIM_USER}" || true
 
@@ -201,7 +202,10 @@ configure_permissions() {
     chown -R "${VICTIM_USER}:${DEV_GROUP}" "${LAB_DIR}"
     chmod -R 775 "${LAB_DIR}/app/portal_pyme"
 
-    # El directorio shared simula un recurso mal gestionado con credenciales expuestas.
+    mkdir -p "${LAB_DIR}/app/portal_pyme/uploads"
+    chown -R www-data:"${DEV_GROUP}" "${LAB_DIR}/app/portal_pyme/uploads"
+    chmod -R 775 "${LAB_DIR}/app/portal_pyme/uploads"
+
     chmod -R 775 "${LAB_DIR}/shared"
 
     cat > "${LAB_DIR}/shared/dev_credentials.txt" <<EOF
@@ -357,6 +361,19 @@ main() {
     require_root
     require_ubuntu
     detect_repo_layout
+
+    # Validación cuando se usa --skip-install
+    if [[ $SKIP_INSTALL -eq 1 ]]; then
+        if ! command -v docker >/dev/null 2>&1; then
+            print_error "Has usado --skip-install pero Docker no está instalado."
+            exit 1
+        fi
+
+        if ! docker compose version >/dev/null 2>&1; then
+            print_error "Has usado --skip-install pero Docker Compose Plugin no está disponible."
+            exit 1
+        fi
+    fi
 
     if [[ $SKIP_INSTALL -eq 0 ]]; then
         install_dependencies
