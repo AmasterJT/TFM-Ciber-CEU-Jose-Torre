@@ -56,6 +56,72 @@ print_error() {
 }
 
 
+show_help() {
+cat << 'EOF'
+Uso:
+  sudo ./setup_tfm_lab.sh [opciones]
+
+Opciones:
+  -h, --help        Muestra esta ayuda breve.
+  --man            Muestra la guía completa de uso.
+  --skip-install   Omite la instalación de dependencias.
+
+Ejemplos:
+  sudo ./setup_tfm_lab.sh
+  sudo ./setup_tfm_lab.sh --skip-install
+  sudo ./setup_tfm_lab.sh --man
+EOF
+}
+
+show_man() {
+cat << 'EOF'
+
+============================================================
+ TFM Red Team Lab - Manual de uso
+============================================================
+
+DESCRIPCIÓN
+  Despliega automáticamente la máquina víctima del laboratorio
+  Red Team del TFM.
+
+USO
+  sudo ./setup_tfm_lab.sh [opciones]
+
+OPCIONES
+  -h, --help
+      Muestra ayuda breve.
+
+  --man
+      Muestra este manual completo.
+
+  --skip-install
+      No instala Docker ni dependencias.
+      Solo debe usarse si la máquina ya tiene Docker y Docker
+      Compose Plugin instalados.
+
+EJEMPLOS
+  Instalación completa:
+
+      sudo ./setup_tfm_lab.sh
+
+  Instalación sin dependencias:
+
+      sudo ./setup_tfm_lab.sh --skip-install
+
+  Ver manual:
+
+      sudo ./setup_tfm_lab.sh --man
+
+FLUJO DEL LABORATORIO
+  Kali VM -> Web Docker -> www-data -> /shared -> SSH dev -> root
+
+AVISO
+  Laboratorio vulnerable intencionado. Usar solo en red host-only.
+============================================================
+
+EOF
+}
+
 require_root() {
     if [[ "${EUID}" -ne 0 ]]; then
         print_error "Este script debe ejecutarse como root: sudo ./setup_tfm_lab.sh"
@@ -353,9 +419,24 @@ main() {
     SKIP_INSTALL=0
 
     for arg in "$@"; do
-        if [[ "${arg}" == "--skip-install" ]]; then
-            SKIP_INSTALL=1
-        fi
+        case "${arg}" in
+            --skip-install)
+                SKIP_INSTALL=1
+                ;;
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            --man)
+                show_man
+                exit 0
+                ;;
+            *)
+                print_error "Opción desconocida: ${arg}"
+                echo "Usa -h o --help para ver la ayuda."
+                exit 1
+                ;;
+        esac
     done
 
     require_root
