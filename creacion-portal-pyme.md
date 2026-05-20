@@ -196,3 +196,9 @@ El portal PYME vulnerable representa un entorno realista y progresivo para el ap
 * Enfoque metodológico
 
 Ideal para simular escenarios de Red Team en un entorno controlado.
+
+
+
+DC01
+administrador
+Admin123*
