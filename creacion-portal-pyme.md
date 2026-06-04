@@ -199,6 +199,3 @@ Ideal para simular escenarios de Red Team en un entorno controlado.
 
 
 
-DC01
-administrador
-Admin123*
