@@ -1,0 +1,12 @@
+network:
+  version: 2
+
+  ethernets:
+
+    ens33:
+      dhcp4: true
+
+    ens37:
+      dhcp4: no
+      addresses:
+        - 10.10.10.10/24
