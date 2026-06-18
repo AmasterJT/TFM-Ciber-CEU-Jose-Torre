@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./app:/var/www/html
+      - ./app/portal_pyme:/var/www/html
       - ./shared:/shared
     depends_on:
       - db
