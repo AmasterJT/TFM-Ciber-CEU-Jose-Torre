@@ -13,12 +13,12 @@ include 'includes/sidebar.php';
     <div class="card">
         <h3>Acceso empleados</h3>
         <p>Entrada privada para personal de soporte, ventas, administración y dirección.</p>
-        <p><a href="/portal_pyme/login.php">Ir al login</a></p>
+        <p><a href="/login.php">Ir al login</a></p>
     </div>
     <div class="card">
         <h3>Consulta de tickets</h3>
         <p>Los clientes pueden consultar el estado de una incidencia mediante su código público.</p>
-        <p><a href="/portal_pyme/estado_ticket.php">Consultar estado</a></p>
+        <p><a href="/estado_ticket.php">Consultar estado</a></p>
     </div>
     <div class="card">
         <h3>Soporte técnico</h3>
