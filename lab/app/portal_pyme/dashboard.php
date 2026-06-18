@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-if (!isset($_SESSION['empleado_id'])) { header("Location: /portal_pyme/login.php"); exit; }
+if (!isset($_SESSION['empleado_id'])) { header("Location: /login.php"); exit; }
 include 'config/db.php';
 include 'includes/header.php';
 include 'includes/sidebar.php';

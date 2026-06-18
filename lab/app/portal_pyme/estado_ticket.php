@@ -100,7 +100,7 @@ unset($_SESSION['ticket_flash'], $_SESSION['ticket_errors'], $_SESSION['ticket_f
             <button type="button" class="modal-close-x" onclick="closeTicketModal()">×</button>
         </div>
 
-        <form method="POST" action="/portal_pyme/crear_ticket.php" class="ticket-form">
+        <form method="POST" action="/crear_ticket.php" class="ticket-form">
             <div class="field-group">
                 <label>Nombre</label>
                 <?php if (isset($ticket_errors['nombre'])): ?>

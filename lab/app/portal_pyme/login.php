@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION['rol'] = $empleado['rol'];
             $_SESSION['email'] = $empleado['email'];
 
-            header("Location: /portal_pyme/perfil.php");
+            header("Location: /perfil.php");
             exit;
-        }
+        }z
     }
 
     $error = "Usuario o contraseña incorrectos";
@@ -42,7 +42,7 @@ include 'includes/header.php';
     <div class="login-page">
         <div class="login-card">
 
-            <a href="/portal_pyme/index.php" class="back-arrow">Volver</a>
+            <a href="/index.php" class="back-arrow">Volver</a>
 
             <h3>Inicio de sesión</h3>
 

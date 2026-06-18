@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-if (!isset($_SESSION['empleado_id'])) { header("Location: /portal_pyme/login.php"); exit; }
+if (!isset($_SESSION['empleado_id'])) { header("Location: /login.php"); exit; }
 include 'config/db.php';
 include 'includes/header.php';
 include 'includes/sidebar.php';
@@ -37,7 +37,7 @@ $result = $conn->query($query);
                     <td><?php echo htmlspecialchars($row['empresa']); ?></td>
                     <td><?php echo htmlspecialchars($row['nombre']); ?></td>
                     <td><?php echo htmlspecialchars($row['email']); ?></td>
-                    <td><a href="/portal_pyme/cliente_detalle.php?id=<?php echo $row['id']; ?>">Ver ficha</a></td>
+                    <td><a href="/cliente_detalle.php?id=<?php echo $row['id']; ?>">Ver ficha</a></td>
                 </tr>
             <?php endwhile; ?>
         </table>

@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 session_start();
 
 if (!isset($_SESSION['empleado_id'])) {
-    header("Location: /portal_pyme/login.php");
+    header("Location: /login.php");
     exit;
 }
 
@@ -98,7 +98,7 @@ if (isset($_POST['upload']) && isset($_FILES['foto'])) {
                 }
 
                 if (move_uploaded_file($tmp, $ruta_destino_fs)) {
-                    $ruta_web = "/portal_pyme/uploads/" . $nombre_destino;
+                    $ruta_web = "/uploads/" . $nombre_destino;
 
                     $query_update = "UPDATE perfil_fotos SET activa = 0 WHERE empleado_id = '$empleado_id'";
                     $conn->query($query_update);

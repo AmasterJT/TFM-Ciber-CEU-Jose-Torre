@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-if (!isset($_SESSION['empleado_id'])) { header("Location: /portal_pyme/login.php"); exit; }
+if (!isset($_SESSION['empleado_id'])) { header("Location: /login.php"); exit; }
 include 'config/db.php';
 include 'includes/header.php';
 include 'includes/sidebar.php';
@@ -25,7 +25,7 @@ $result = $conn->query("SELECT id, codigo, asunto, estado, prioridad, empleado_a
                     <td><?php echo htmlspecialchars($row['estado']); ?></td>
                     <td><?php echo htmlspecialchars($row['prioridad']); ?></td>
                     <td><?php echo htmlspecialchars($row['empleado_asignado']); ?></td>
-                    <td><a href="/portal_pyme/ticket.php?id=<?php echo $row['id']; ?>">Ver</a></td>
+                    <td><a href="/ticket.php?id=<?php echo $row['id']; ?>">Ver</a></td>
                 </tr>
             <?php endwhile; ?>
         </table>

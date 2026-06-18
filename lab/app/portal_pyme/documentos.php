@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 session_start();
 
 if (!isset($_SESSION['empleado_id'])) {
-    header("Location: /portal_pyme/login.php");
+    header("Location: /login.php");
     exit;
 }
 

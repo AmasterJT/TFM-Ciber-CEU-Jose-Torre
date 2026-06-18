@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
-if (!isset($_SESSION['empleado_id'])) { header("Location: /portal_pyme/login.php"); exit; }
+if (!isset($_SESSION['empleado_id'])) { header("Location: /login.php"); exit; }
 include 'config/db.php';
 include 'includes/header.php';
 include 'includes/sidebar.php';
@@ -27,7 +27,7 @@ $cliente = $result->fetch_assoc();
         <p><strong>Responsable interno:</strong> empleado #<?php echo htmlspecialchars($cliente['owner_id']); ?></p>
         <p><strong>Notas internas:</strong></p>
         <div class="notice"><?php echo nl2br(htmlspecialchars($cliente['notas'])); ?></div>
-        <p><a href="/portal_pyme/clientes.php">Volver al listado</a></p>
+        <p><a href="/clientes.php">Volver al listado</a></p>
     <?php else: ?>
         <div class="notice">Cliente no encontrado</div>
     <?php endif; ?>
