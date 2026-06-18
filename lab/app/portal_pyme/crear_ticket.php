@@ -3,7 +3,7 @@ session_start();
 include 'config/db.php';
 
 function volver() {
-    header("Location: /portal_pyme/estado_ticket.php");
+    header("Location: /estado_ticket.php");
     exit;
 }
 
@@ -71,7 +71,7 @@ VALUES
 if ($conn->query($query)) {
     unset($_SESSION['ticket_form_old']);
     $_SESSION['ticket_flash'] = ['message' => "Ticket creado: $codigo"];
-    header("Location: /portal_pyme/estado_ticket.php?codigo=" . urlencode($codigo));
+    header("Location: /estado_ticket.php?codigo=" . urlencode($codigo));
     exit;
 }
 
