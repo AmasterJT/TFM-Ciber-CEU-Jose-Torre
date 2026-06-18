@@ -76,6 +76,6 @@ INSERT INTO tickets (id, codigo, asunto, descripcion, estado, prioridad, emplead
 (5, 'TCK-2026-005', 'Alta nuevo empleado', 'Crear usuario temporal para soporte de guardia.', 'En revisión', 'Media', 'soporte', 5);
 
 INSERT INTO documentos (id, nombre, tipo, descripcion, ruta) VALUES
-(1, 'Manual de onboarding', 'TXT', 'Documento básico para nuevos empleados.', '/portal_pyme/uploads/manual_onboarding.txt'),
-(2, 'Política de contraseñas', 'TXT', 'Borrador pendiente de revisión por administración.', '/portal_pyme/uploads/politica_passwords.txt'),
-(3, 'Backup histórico', 'SQL', 'Copia parcial del portal antiguo. Pendiente de retirada.', '/portal_pyme/backup/portal_backup.sql');
+(1, 'Manual de onboarding', 'TXT', 'Documento básico para nuevos empleados.', '/uploads/manual_onboarding.txt'),
+(2, 'Política de contraseñas', 'TXT', 'Borrador pendiente de revisión por administración.', '/uploads/politica_passwords.txt'),
+(3, 'Backup histórico', 'SQL', 'Copia parcial del portal antiguo. Pendiente de retirada.', '/backup/portal_backup.sql');

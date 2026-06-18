@@ -11,11 +11,11 @@ if (session_status() === PHP_SESSION_NONE) {
     <title>Portal PYME</title>
 
     <!-- FAVICON (varias opciones para asegurar que cargue) -->
-    <link rel="icon" href="/portal_pyme/favicon.ico">
-    <link rel="icon" type="image/png" href="/portal_pyme/assets/img/favicon.png">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/portal_pyme/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body>
@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-- LOGO CLICABLE SIN CAMBIAR ESTILO -->
     <h1 style="margin:0;">
-        <a href="/portal_pyme/index.php"
+        <a href="/index.php"
            style="color: inherit; text-decoration: none;">
             Portal PYME · Gestión y Soporte
         </a>
@@ -32,7 +32,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="topbar-text">
         <?php if (isset($_SESSION['username'])): ?>
             Bienvenido, <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong> |
-            <a href="/portal_pyme/logout.php" class="logout-btn">Cerrar sesión</a>
+            <a href="/logout.php" class="logout-btn">Cerrar sesión</a>
         <?php else: ?>
             Plataforma corporativa de clientes e incidencias
         <?php endif; ?>
