@@ -414,6 +414,34 @@ show_summary() {
     echo "============================================================"
 }
 
+configure_lab_autostart() {
+    print_info "Configurando autoarranque del laboratorio..."
+
+    cat > /etc/systemd/system/tfm-lab.service <<EOF
+[Unit]
+Description=TFM Red Team Lab Docker Compose
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=${LAB_DIR}
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
+RemainAfterExit=yes
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    systemctl daemon-reload
+    systemctl enable tfm-lab.service
+    systemctl start tfm-lab.service
+
+    print_ok "Autoarranque configurado: tfm-lab.service"
+}
 
 main() {
     SKIP_INSTALL=0
@@ -469,6 +497,7 @@ main() {
     configure_vulnerable_sudo
     ensure_docker_compose_uses_lab_paths
     start_docker_lab
+    configure_lab_autostart
     show_summary
 }
 

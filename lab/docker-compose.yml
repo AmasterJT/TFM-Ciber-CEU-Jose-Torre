@@ -2,6 +2,7 @@ services:
   web:
     build: ./docker/web
     container_name: tfm_web
+    restart: unless-stopped
     ports:
       - "8080:80"
     volumes:
