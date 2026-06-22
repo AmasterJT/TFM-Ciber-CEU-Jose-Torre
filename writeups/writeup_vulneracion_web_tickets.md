@@ -19,6 +19,33 @@ vamos a:
 
 ---
 
+
+## Enumeración inicial
+
+La primera tarea consiste en identificar los servicios expuestos.
+
+```bash
+nmap -sV -sC -p- 192.168.129.129
+```
+
+El análisis muestra la presencia de un servidor Apache accesible a través del puerto 8080.
+
+```text
+PORT     STATE SERVICE VERSION
+8080/tcp open  http    Apache httpd
+```
+
+Accediendo mediante navegador:
+
+```text
+http://192.168.129.129:8080/
+```
+
+se observa un portal corporativo aparentemente destinado a la gestión de clientes y tickets.
+
+---
+
+
 ### 1. Punto de partida
 
 Usamos un ticket válido, para ello creamos un ticket y usamos el codigo que nos proporciona:
@@ -233,6 +260,33 @@ sqlmap \
 ```
 
 ---
+
+
+## Uso de credenciales
+
+Con la base de datos tenemos acceso a las credenciales de  la pagina web, probamos cada una de ellas para comprobar si podemos vulnerar el Login
+
+```
+mysql> select username, password, rol from empleados;
++--------------+--------------+----------+
+| username     | password     | rol      |
++--------------+--------------+----------+
+| system_admin | admin123     | admin    |
+| soporte      | soporte123   | empleado |
+| jtorre       | Invierno2026 | empleado |
+| mgarcia      | clientes2026 | empleado |
+| contabilidad | Conta2026!   | empleado |
+| juan         | juan123      | empleado |
++--------------+--------------+----------+
+```
+
+Vemos que tenemos un usuario con permisos de administrador. Probamos estas credenciales
+
+```
+Usuario: system_admin
+Contraseña: admin123
+```
+
 
 # 🧬 Riesgo asociado a XSS
 
